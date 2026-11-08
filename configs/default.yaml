@@ -1,0 +1,63 @@
+seed: 42
+
+paths:
+  terrads_db: data/external/terrads/TerraDS.sqlite
+  repos_csv: data/raw/repos.csv
+  shortlist_csv: data/raw/shortlist.csv
+  dataset_csv: data/raw/dataset.csv     # output of `build-dataset`: the repos used downstream
+  tmp: data/tmp
+  processed: data/processed
+  results: data/results
+  logs: data/logs                       # one timestamped log per select-repos / mine / build-dataset run
+
+selection:                      # every value is justified in docs/THRESHOLDS.md
+  provider: aws                 # only place a provider is named
+  min_resources: 20             # managed resources of `provider` in the repo (TerraDS)
+  min_stars: 0
+  shortlist: 150                # top-N by stars to depth-check; null = all of TerraDS (`--all`)
+  min_tf_commits: 50            # cheap depth proxy (= min_usable_commits -> lossless)
+  min_usable_commits: 50        # exact, applied by build-dataset after mining
+  max_add_only_frac: 0.4        # exact, applied by build-dataset after mining
+  dedup_forks: true             # repos sharing a root commit = one project (keep most stars)
+  workers: 6                    # parallel blobless clones in the depth check
+  exclude_keywords: []          # optional manual exclusions (unused by default)
+  exclude_repos: []
+
+clone:
+  mode: blobless_prefetch       # blobless_prefetch | full
+  timeout_s: 600
+  prefetch_chunk: 2000          # blob oids per `git fetch` call
+
+mining:
+  max_commits: 2000
+  min_items: 2
+  max_items: 30
+  warmup_frac: 0.2
+  use_merge_commits: true       # first-parent merge = one PR-level transaction (SPEC §15.4)
+
+features:
+  max_candidates: 200
+  graph_max_dist: 4
+  recency_tau: 100
+  churn_window: 200
+
+ga:
+  population: 60
+  generations: 60
+  tournament: 3
+  crossover_rate: 0.8
+  mutation_rate: 0.3
+  sigma_start: 0.2
+  sigma_end: 0.02
+  elitism: 2
+  fitness_sample: 2000
+
+evaluation:
+  k: [1, 5, 10]
+  folds: 5
+  seeds: 10
+  temporal_test_frac: 0.1
+
+output:
+  csv: true
+  csv_features: false

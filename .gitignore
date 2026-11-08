@@ -182,8 +182,11 @@ fabric.properties
 # idea folder, uncomment if you don't need it
 .idea
 
-# Project-specific paths
+# Project-specific paths (data is regenerable; only the pinned repo selection is tracked)
 data/*
+!data/raw/
+data/raw/*
+!data/raw/repos.csv
 
 # Claude-specific paths
 .claude/settings.local.json
