@@ -26,7 +26,7 @@ def build_dataset(cfg: Config) -> pd.DataFrame:
     rows = []
     for _, r in repos.iterrows():
         out_dir = cfg.paths.processed / r.slug
-        head = processed_head(out_dir)
+        head = processed_head(out_dir, cfg)
         row = {
             "slug": r.slug,
             "full_name": r.full_name,

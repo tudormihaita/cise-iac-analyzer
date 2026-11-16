@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import posixpath
 import re
 
-from tfimpact.constants import ADDR_SEP, RESOURCE_TYPE_RE
+from tfimpact.constants import ADDR_SEP, RESOURCE_TYPE_RE, ROOT_DIR
 
 _IDENT = r"[A-Za-z_][\w-]*"
 # (?<![\w.]) prevents matching mid-traversal, e.g. the `this.arn` in `aws_x.this.arn`
@@ -23,7 +24,6 @@ def extract_refs(body_text: str, directory: str) -> frozenset[str]:
     """Extract the different Terraform types of blocks: all addresses (same directory) syntactically referenced in `body_text`."""
     refs: set[str] = set()
     for t, n in _DATA_RE.findall(body_text):
-
         refs.add(make_address(directory, f"data.{t}.{n}"))
     for n in _MODULE_RE.findall(body_text):
         refs.add(make_address(directory, f"module.{n}"))
@@ -35,3 +35,28 @@ def extract_refs(body_text: str, directory: str) -> frozenset[str]:
         if RESOURCE_TYPE_RE.match(t):
             refs.add(make_address(directory, f"resource.{t}.{n}"))
     return frozenset(refs)
+
+
+# module.<name>.<output>, optionally with an index: module.x[0].out / module.x["k"].out
+_MODULE_OUT_RE = re.compile(rf"{_LEAD}module\.({_IDENT})(?:\[[^\]]*\])?\.({_IDENT})")
+
+
+def extract_module_output_refs(body_text: str, directory: str) -> frozenset[tuple[str, str]]:
+    """(module address, output name) pairs read via `module.<name>.<output>`."""
+    return frozenset(
+        (make_address(directory, f"module.{m}"), o) for m, o in _MODULE_OUT_RE.findall(body_text)
+    )
+
+
+def resolve_local_source(directory: str, source: object) -> str | None:
+    """Directory of a local module source (`./x`, `../x`) relative to the repo root, else None.
+
+    Remote sources (registry, git, http, s3 ...) and paths escaping the repo return None.
+    """
+    if not isinstance(source, str) or not source.startswith(("./", "../")):
+        return None
+    base = "" if directory == ROOT_DIR else directory
+    resolved = posixpath.normpath(posixpath.join(base, source))
+    if resolved.startswith(".."):
+        return None
+    return ROOT_DIR if resolved in ("", ".") else resolved

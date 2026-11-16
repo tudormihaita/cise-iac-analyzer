@@ -55,9 +55,45 @@ class MiningConfig:
 @dataclass
 class FeaturesConfig:
     max_candidates: int = 200
+    prefilter_max_dist: int = 4
     graph_max_dist: int = 4
     recency_tau: float = 100.0
     churn_window: int = 200
+
+
+def _default_model_features() -> list[str]:
+    return [
+        "hist_cochange_conf",
+        "hist_cochange_count",
+        "hist_cochange_recency",
+        "hist_cand_recent_changes",
+        "hist_file_cochange_conf",
+        "hist_type_cochange_conf",
+        "graph_proximity",
+        "graph_shared_neighbors",
+        "graph_cand_degree",
+        "graph_propagation_conf",
+        "text_name_similarity",
+        "text_content_similarity",
+    ]
+
+
+@dataclass
+class ModelConfig:
+    # columns of features.parquet the methods use; not part of settings_hash (no re-mine)
+    features: list[str] = field(default_factory=_default_model_features)
+
+
+@dataclass
+class ArmConfig:
+    min_support: int = 1
+    min_confidence: float = 0.1
+    top_k: int = 10
+
+
+@dataclass
+class BaselinesConfig:
+    arm: ArmConfig = field(default_factory=ArmConfig)
 
 
 @dataclass
@@ -95,6 +131,8 @@ class Config:
     clone: CloneConfig = field(default_factory=CloneConfig)
     mining: MiningConfig = field(default_factory=MiningConfig)
     features: FeaturesConfig = field(default_factory=FeaturesConfig)
+    model: ModelConfig = field(default_factory=ModelConfig)
+    baselines: BaselinesConfig = field(default_factory=BaselinesConfig)
     ga: GAConfig = field(default_factory=GAConfig)
     evaluation: EvaluationConfig = field(default_factory=EvaluationConfig)
     output: OutputConfig = field(default_factory=OutputConfig)

@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import re
 
+# Version of the per-repo tables in data/processed/
+PIPELINE_VERSION = 3
+
 # Terraform block kinds
 RESOURCE = "resource"
 DATA = "data"

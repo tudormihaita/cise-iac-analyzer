@@ -33,13 +33,36 @@ mining:
   min_items: 2
   max_items: 30
   warmup_frac: 0.2
-  use_merge_commits: true       # first-parent merge = one PR-level transaction (SPEC §15.4)
+  use_merge_commits: true       # first-parent merge = one PR-level transaction
 
 features:
   max_candidates: 200
+  prefilter_max_dist: 4          # pre-filter keeps blocks within this graph distance (= graph_max_dist)
   graph_max_dist: 4
   recency_tau: 100
   churn_window: 200
+
+model:                          # columns of features.parquet the methods use
+  features:                     # changing this never needs a re-mine
+    - hist_cochange_conf
+    - hist_cochange_count
+    - hist_cochange_recency
+    - hist_cand_recent_changes
+    - hist_file_cochange_conf
+    - hist_type_cochange_conf
+    - graph_proximity
+    - graph_shared_neighbors
+    - graph_cand_degree
+    - graph_propagation_conf
+    - text_name_similarity
+    - text_content_similarity
+    # stored but off by default: loc_same_file, loc_same_dir
+
+baselines:
+  arm:                          # ROSE settings for shared parameters
+    min_support: 1
+    min_confidence: 0.1
+    top_k: 10                   # open: may be raised if 10 proves too small after the dev check
 
 ga:
   population: 60

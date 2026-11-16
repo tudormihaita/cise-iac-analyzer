@@ -51,6 +51,9 @@ class Snapshot:
     def dir_blocks(self, directory: str) -> dict[str, Block]:
         return {a: self.blocks[a] for a in self._dir_addrs.get(directory, ())}
 
+    def dir_addresses(self, directory: str) -> set[str]:
+        return set(self._dir_addrs.get(directory, ()))
+
     @property
     def directories(self) -> list[str]:
         return sorted(self._dir_addrs)

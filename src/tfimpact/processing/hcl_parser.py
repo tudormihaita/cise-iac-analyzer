@@ -18,7 +18,15 @@ from tfimpact.constants import (
     ROOT_DIR,
     VARIABLE,
 )
-from tfimpact.processing.references import extract_refs, make_address
+from tfimpact.processing.references import (
+    extract_module_output_refs,
+    extract_refs,
+    make_address,
+    resolve_local_source,
+)
+
+# module-block arguments that are meta-arguments, not input variables of the module
+MODULE_META_ARGS = frozenset({"source", "version", "count", "for_each", "providers", "depends_on"})
 
 # serialization: comments dropped, no block markers, unquoted strings,
 # heredocs flattened -> formatting-only edits yield identical output
@@ -41,6 +49,10 @@ class Block:
     body_norm: str
     body_hash: str
     refs: frozenset[str]
+    # module plumbing; empty for non-module blocks / remote sources
+    mod_out_refs: frozenset[tuple[str, str]] = frozenset()  # (module address, output) read
+    module_source_dir: str | None = None  # resolved local `source` of a module block
+    module_args: frozenset[str] = frozenset()  # input variables set by a module block
 
 
 def module_dir(path: str) -> str:
@@ -62,6 +74,11 @@ def _make_block(kind: str, btype: str, name: str, local_addr: str, body: Any, pa
     body_norm = canonical_json(body)
     address = make_address(directory, local_addr)
     refs = extract_refs(body_norm, directory) - {address}
+    src_dir, args = None, frozenset()
+    if kind == MODULE and isinstance(body, dict):
+        src_dir = resolve_local_source(directory, body.get("source"))
+        if src_dir is not None:
+            args = frozenset(k for k in body if k not in MODULE_META_ARGS)
     return Block(
         address=address,
         kind=kind,
@@ -72,6 +89,9 @@ def _make_block(kind: str, btype: str, name: str, local_addr: str, body: Any, pa
         body_norm=body_norm,
         body_hash=hashlib.blake2b(body_norm.encode(), digest_size=12).hexdigest(),
         refs=refs,
+        mod_out_refs=extract_module_output_refs(body_norm, directory),
+        module_source_dir=src_dir,
+        module_args=args,
     )
 
 
