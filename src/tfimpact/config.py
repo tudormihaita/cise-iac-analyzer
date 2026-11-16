@@ -111,10 +111,11 @@ class GAConfig:
 
 @dataclass
 class EvaluationConfig:
-    k: list[int] = field(default_factory=lambda: [1, 5, 10])
+    k: list[int] = field(default_factory=lambda: [1, 3, 5, 10])
     folds: int = 5
     seeds: int = 10
-    temporal_test_frac: float = 0.1
+    bootstrap: int = 1000
+    methods: list[str] = field(default_factory=lambda: ["arm", "fixed_weights", "random"])
 
 
 @dataclass

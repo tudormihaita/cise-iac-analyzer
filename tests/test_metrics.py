@@ -194,3 +194,27 @@ def test_candidate_recall_ceiling() -> None:
     per_repo, overall = M.candidate_recall_ceiling(qs)
     assert per_repo["A"] == pytest.approx(6 / 8) and per_repo["B"] == 1.0
     assert overall == pytest.approx((0.75 + 1.0) / 2)
+
+
+def test_average_precision_hand_computed() -> None:
+    f, q, s = _single()  # positives at ranks 3 and 5, 4 true labels
+    row = M.compute_query_metrics(f, q, s).iloc[0]
+    assert row["ap"] == pytest.approx((1 / 3 + 2 / 5) / 4)
+    assert row["recall@3"] == pytest.approx(1 / 4) and row["hit@3"] == 1
+
+
+def test_recommended_mask_hides_rows() -> None:
+    f, q, s = _single()
+    rec = np.array([True, True, False, True, True])  # rank-3 positive not recommended
+    row = M.compute_query_metrics(f, q, s, recommended=rec).iloc[0]
+    assert row["rr"] == pytest.approx(1 / 5)
+    assert row["ap"] == pytest.approx((1 / 5) / 4)
+    assert row["hit@3"] == 0
+
+
+def test_bootstrap_ci_contains_mean_and_is_deterministic() -> None:
+    v = np.linspace(0.2, 0.8, 53)
+    lo, hi = M.bootstrap_ci(v, 1000, seed=1)
+    assert lo < v.mean() < hi and hi - lo < 0.2
+    assert M.bootstrap_ci(v, 1000, seed=1) == (lo, hi)
+    assert M.bootstrap_ci(np.full(10, 0.5), 200, seed=0) == (0.5, 0.5)

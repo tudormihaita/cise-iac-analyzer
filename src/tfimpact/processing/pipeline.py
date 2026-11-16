@@ -69,6 +69,7 @@ class RepoResult:
 
 class ParseCache:
     """Parses each blob once (keyed by oid); blocks are rebuilt per path."""
+
     def __init__(self, reader: BlobReader):
         self._reader = reader
         self._parsed: dict[str, dict[str, Any] | str] = {}

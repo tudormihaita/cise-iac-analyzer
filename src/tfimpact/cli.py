@@ -10,6 +10,7 @@ from typing import Any
 import typer
 from rich.console import Console
 from rich.logging import RichHandler
+from rich.text import Text
 
 from tfimpact.config import Config, load_config
 
@@ -19,7 +20,7 @@ console = Console()
 _log_console: Console | None = None
 
 # commands whose output is kept as evidence in data/logs/<command>_<timestamp>.log
-LOGGED_COMMANDS = {"select-repos", "mine", "build-dataset"}
+LOGGED_COMMANDS = {"select-repos", "mine", "build-dataset", "evaluate"}
 
 
 def cfg() -> Config:
@@ -243,9 +244,19 @@ def train() -> None:
 
 
 @app.command()
-def evaluate() -> None:
-    """Run evaluation methods."""
-    _todo("evaluate")
+def evaluate(
+    methods: str = typer.Option(None, help="Comma-separated (default evaluation.methods)"),
+) -> None:
+    """Grouped k-fold evaluation on the core repos (+ add-only repos held out);
+    writes data/results/*.csv + summary.md."""
+    from tfimpact.evaluation.experiments import run_evaluation, save_results, summary_markdown
+
+    c = cfg()
+    names = [m.strip() for m in methods.split(",")] if methods else list(c.evaluation.methods)
+    res = run_evaluation(c, names, progress=lambda s: console.log(s))
+    for p in save_results(res, c.paths.results, _code_version()):
+        out(f"wrote {p}")
+    out(Text(summary_markdown(res)))  # plain text: [..] is not rich markup
 
 
 @app.command()

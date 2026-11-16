@@ -48,6 +48,7 @@ def run_git(
 @dataclass(frozen=True)
 class FileChange:
     """One `.tf` path touched by a commit, relative to its first parent."""
+
     status: str  # A / M / D / T
     path: str
     old_oid: str | None
@@ -192,6 +193,7 @@ def prefetch_blobs(repo: Path, oids: Sequence[str], chunk: int, timeout: float) 
 
 class BlobReader:
     """Persistent `git cat-file --batch` process for fast blob reads."""
+
     def __init__(self, repo: Path):
         self._proc = subprocess.Popen(
             ["git", "-C", str(repo), "cat-file", "--batch"],

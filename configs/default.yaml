@@ -76,10 +76,11 @@ ga:
   fitness_sample: 2000
 
 evaluation:
-  k: [1, 5, 10]
-  folds: 5
-  seeds: 10
-  temporal_test_frac: 0.1
+  k: [1, 3, 5, 10]              # 3 matches ROSE (top 3) and GA-IaCRec (Top@3)
+  folds: 5                      # grouped by repository, balanced by query count
+  seeds: 10                     # GA runs per fold
+  bootstrap: 1000               # resamples for the 95% CI of per-repo means
+  methods: [arm, fixed_weights, random]
 
 output:
   csv: true

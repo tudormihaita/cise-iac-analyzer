@@ -21,7 +21,7 @@ def make_address(directory: str, local_addr: str) -> str:
 
 
 def extract_refs(body_text: str, directory: str) -> frozenset[str]:
-    """Extract the different Terraform types of blocks: all addresses (same directory) syntactically referenced in `body_text`."""
+    """Extract the different Terraform types of blocks: all addresses (same directory) syntactically referenced in `body_text`."""  # noqa: E501
     refs: set[str] = set()
     for t, n in _DATA_RE.findall(body_text):
         refs.add(make_address(directory, f"data.{t}.{n}"))

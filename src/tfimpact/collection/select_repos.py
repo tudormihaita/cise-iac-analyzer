@@ -46,7 +46,8 @@ _MODULE_NAME_RE = re.compile(r"^terraform-[a-z0-9]+-[a-z0-9_-]+$")
 
 
 def repo_kind(name: str, description: str | None, topics: str | None) -> str:
-    """Labeling logic for distinguishing different types of repositories (used for breakdowns, not filtering)."""
+    """Labeling logic for distinguishing different types of repositories
+    (used for breakdowns, not filtering)."""
     try:
         topic_list = json.loads(topics) if isinstance(topics, str) and topics else []
     except json.JSONDecodeError:
