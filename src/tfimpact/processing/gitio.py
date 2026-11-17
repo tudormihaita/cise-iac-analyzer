@@ -229,3 +229,11 @@ class BlobReader:
 
     def __exit__(self, *exc: object) -> None:
         self.close()
+
+
+def worktree_tf_changes(repo: Path) -> list[str]:
+    """`.tf` paths that differ between the working tree and HEAD: modified, deleted, renamed
+    (both sides) and untracked (not ignored) files, relative to the repo root."""
+    tracked = run_git(repo, "diff", "--name-only", "--no-renames", "HEAD").splitlines()
+    untracked = run_git(repo, "ls-files", "--others", "--exclude-standard").splitlines()
+    return sorted({p for p in tracked + untracked if p and is_tf_path(p)})

@@ -58,6 +58,21 @@ SUCCESS = "_SUCCESS"
 
 
 @dataclass
+class RepoState:
+    """Everything the features are computed from, after the last mined commit (used by
+    `recommend` to build features for new seeds exactly as during training)."""
+
+    snap: Snapshot
+    graph: RefGraph
+    tokens: TokenIndex
+    content: ContentIndex
+    miner: AssociationRuleMiner
+    propagation: PropagationMiner
+    last_idx: int
+    head_sha: str
+
+
+@dataclass
 class RepoResult:
     commits: pd.DataFrame
     changes: pd.DataFrame
@@ -65,6 +80,7 @@ class RepoResult:
     queries: pd.DataFrame
     features: pd.DataFrame
     stats: dict[str, Any] = field(default_factory=dict)
+    state: RepoState | None = None
 
 
 class ParseCache:
@@ -167,8 +183,7 @@ def process_repo(
                 _extend(acc, builder.build_commit(idx, c.sha, items))
             if 1 <= len(items) <= m.max_items and (m.use_merge_commits or not c.is_merge):
                 miner.update(idx, items)
-                if compute_features:
-                    propagation.update(items, graph)  # graph still == parent(t)
+                propagation.update(items, graph)  # graph still == parent(t)
             for it in items:
                 change_rows.append(
                     {
@@ -203,7 +218,10 @@ def process_repo(
     queries, features = _feature_tables(slug, acc, commits)
     stats = _stats(slug, commits, changes, cache, snap, time.time() - t0, t_fetch)
     stats.update(_feature_stats(queries, features))
-    return RepoResult(commits, changes, errors, queries, features, stats)
+    state = RepoState(
+        snap, graph, tokens, content, miner, propagation, len(history) - 1, history[-1].sha
+    )
+    return RepoResult(commits, changes, errors, queries, features, stats, state)
 
 
 def _extend(acc: CommitFeatures, cf: CommitFeatures) -> None:

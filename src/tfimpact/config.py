@@ -141,6 +141,20 @@ class EvaluationConfig:
 
 
 @dataclass
+class ExperimentsConfig:
+    seeds: int = 3  # GA runs per fold (ablation) or draws per fold and fraction (learning curve)
+    ablation: list[str] = field(default_factory=lambda: ["hist", "graph", "text"])
+    learning_curve: list[float] = field(default_factory=lambda: [0.1, 0.25, 0.5, 0.75])
+
+
+@dataclass
+class RecommendConfig:
+    top: int = 10
+    combine: str = "max"  # several seeds: "max" (related to any edit) or "sum"
+    explain_top: int = 3  # contributions shown per suggestion with --explain
+
+
+@dataclass
 class OutputConfig:
     csv: bool = True
     csv_features: bool = False
@@ -158,7 +172,9 @@ class Config:
     baselines: BaselinesConfig = field(default_factory=BaselinesConfig)
     ga: GAConfig = field(default_factory=GAConfig)
     evaluation: EvaluationConfig = field(default_factory=EvaluationConfig)
+    experiments: ExperimentsConfig = field(default_factory=ExperimentsConfig)
     output: OutputConfig = field(default_factory=OutputConfig)
+    recommend: RecommendConfig = field(default_factory=RecommendConfig)
 
 
 def _build(cls: type, data: dict[str, Any]) -> Any:

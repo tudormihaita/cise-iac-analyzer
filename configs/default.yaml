@@ -97,6 +97,16 @@ evaluation:
   bootstrap: 1000               # resamples for the 95% CI of per-repo means
   methods: [ga, random_search, arm, fixed_weights, random]
 
+experiments:                    # `tfimpact experiments --ablation / --learning-curve`
+  seeds: 3                      # runs per fold (ablation) / draws per fold and fraction (curve)
+  ablation: [hist, graph, text] # one GA per feature family (name prefix), vs the full GA
+  learning_curve: [0.1, 0.25, 0.5, 0.75]   # shares of each fold's training repos (1.0 = main run)
+
 output:
   csv: true
   csv_features: false
+
+recommend:                      # `tfimpact recommend` (model: paths.models/ga_weights.json)
+  top: 10                       # suggestions per list
+  combine: max                  # several --diff seeds: max (related to any edit) or sum
+  explain_top: 3                # feature contributions shown per suggestion with --explain

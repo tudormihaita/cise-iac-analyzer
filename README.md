@@ -39,6 +39,16 @@ uv run tfimpact export                # result tables + figures -> results/main/
 Main result (53 repos, MRR): GA 0.746, equal weights 0.563, ROSE-style rules 0.481, random 0.118
 (`results/main/summary.md`).
 
+## Recommending co-changes (inference)
+
+Needs only git, uv and the committed model `models/ga_weights.json` (no Terraform, no
+credentials, no admin rights):
+
+```bash
+uv run tfimpact recommend --repo /path/to/terraform-repo --block aws_s3_bucket.logs --explain
+uv run tfimpact recommend --repo /path/to/terraform-repo --diff      # seeds = your uncommitted edits
+```
+
 ## Development
 
 ```bash

@@ -116,13 +116,13 @@ def select_repos(
     sl, selected = select(
         c, -1 if all_repos else limit, workers or c.selection.workers, latest=latest
     )
-    out = write_selection(sl, selected, c)
+    path = write_selection(sl, selected, c)
     out(
         f"shortlist={len(sl)}  depth_errors={sl.depth_error.notna().sum()}  "
         f"fork_duplicates={int(sl.fork_duplicate.sum())}  "
         f"passing(>= {c.selection.min_tf_commits} tf commits)="
         f"{(sl.n_tf_commits.fillna(-1) >= c.selection.min_tf_commits).sum()}  "
-        f"selected={len(selected)} (archived: {int(selected.archived.sum())}) -> {out}"
+        f"selected={len(selected)} (archived: {int(selected.archived.sum())}) -> {path}"
     )
     out("upper bound: usable-commit + add-only filters are applied after `mine`")
     out(selected.repo_kind.value_counts().to_string())
@@ -318,11 +318,31 @@ def experiments(
     convergence: bool = typer.Option(
         False, "--convergence", help="Convergence check: long GA runs with validation curves"
     ),
+    ablation: bool = typer.Option(
+        False, "--ablation", help="GA per feature family vs full GA -> data/results/ablation/"
+    ),
+    learning_curve: bool = typer.Option(
+        False,
+        "--learning-curve",
+        help="GA on shares of each fold's training repos -> data/results/learning_curve/",
+    ),
 ) -> None:
-    """Additional experiments (convergence check; ablation and learning curve to come)."""
+    """Additional experiments: convergence check, ablation, learning curve.
+
+    Ablation and learning curve reuse the folds and, per fold, the configuration chosen by the
+    grid search of the main `evaluate` run (data/results/grid.csv)."""
     c = cfg()
-    if not convergence:
-        raise typer.BadParameter("choose an experiment, e.g. --convergence")
+    if not (convergence or ablation or learning_curve):
+        raise typer.BadParameter("choose --convergence, --ablation and/or --learning-curve")
+    if convergence:
+        _convergence(c)
+    if ablation:
+        _study(c, "ablation")
+    if learning_curve:
+        _study(c, "learning_curve")
+
+
+def _convergence(c: Config) -> None:
     from tfimpact.evaluation.convergence import plot_convergence, run_convergence
 
     curves, summary = run_convergence(c, progress=lambda s: console.log(s))
@@ -341,22 +361,143 @@ def experiments(
     out(f"wrote {c.paths.outputs / 'convergence.csv'}" + (f", {png}" if png else ""))
 
 
+def _study(c: Config, kind: str) -> None:
+    import pandas as pd
+
+    from tfimpact.evaluation import studies as St
+    from tfimpact.evaluation.experiments import run_evaluation, save_results
+    from tfimpact.evaluation.figures import FIGURES, plot_learning_curve
+
+    grid_csv = c.paths.outputs / "grid.csv"
+    if not grid_csv.exists():
+        raise typer.BadParameter("no grid.csv: run `tfimpact evaluate` first")
+    chosen = St.chosen_configs(pd.read_csv(grid_csv))
+    if len(chosen) != c.evaluation.folds:
+        raise typer.BadParameter(f"grid.csv has chosen configurations for {len(chosen)} folds")
+    specs = St.ablation_specs(c) if kind == "ablation" else St.learning_curve_specs(c)
+    out(f"[bold]{kind}[/]: {', '.join(specs)}; per-fold configurations {chosen}")
+    res = run_evaluation(
+        c,
+        list(specs),
+        factory=St.factory(specs, chosen, c.experiments.seeds),
+        progress=lambda s: console.log(s),
+        reference=St.FULL,
+    )
+    target = c.paths.outputs / kind
+    written = save_results(res, target, _code_version())
+    if kind == "ablation":
+        table = St.ablation_table(res, specs, list(c.model.features))
+        cols = {
+            "variant": "variant", "target": "targets", "n_features": "features",
+            "mrr": "MRR", "ci_low": "CI low", "ci_high": "CI high", "map": "MAP",
+            "hit@5": "Hit@5", "full_minus_variant": "full − variant", "ri_full": "RI full",
+            "repos_full_better": "full better", "repos_variant_better": "variant better",
+            "p_holm": "p (Holm)", "a12": "A12",
+        }  # fmt: skip
+        note = (
+            "Core repos, mean over repos; per fold the grid-chosen configuration, "
+            f"{c.experiments.seeds} seeds. Paired tests full vs variant on per-repo MRR "
+            "(Wilcoxon + Holm); RI = (full − variant) / variant."
+        )
+    else:
+        runs = St.learning_curve_runs(res, specs)
+        runs_path = target / "learning_curve_runs.csv"
+        runs.to_csv(runs_path, index=False)
+        written.append(runs_path)
+        table = St.learning_curve_table(res, specs)
+        png = plot_learning_curve(table, target / FIGURES / "learning_curve.png")
+        if png:
+            written.append(png)
+        cols = {
+            "train_frac": "share", "n_train_repos": "training repos", "target": "targets",
+            "mrr": "test MRR", "ci_low": "CI low", "ci_high": "CI high", "sd_runs": "SD draws",
+            "sd_folds": "SD folds", "hit@5": "Hit@5", "train_fitness": "training MRR",
+        }  # fmt: skip
+        note = (
+            "Core test repos, mean over repos; training repos subsampled per fold "
+            f"({c.experiments.seeds} nested draws per share); 100 % = main run (seeds "
+            f"0–{c.experiments.seeds - 1}). Training MRR = fitness on the run's training sample."
+        )
+    csv_path = target / f"{kind}.csv"
+    table.to_csv(csv_path, index=False)
+    md = St.study_markdown(kind.replace("_", " ").capitalize(), note, table, cols)
+    md_path = target / f"{kind}.md"
+    md_path.write_text(md)
+    for p in [*written, csv_path, md_path]:
+        out(f"wrote {p}")
+    out(Text(md))
+
+
 @app.command()
 def export(
     name: str = typer.Option("main", help="Experiment name: results/<name>/"),
 ) -> None:
-    """Copy the curated result files and figures (small, committable) from the run outputs
-    (data/results/) to results/<name>/ (e.g. main, ablation, learning_curve)."""
+    """Copy the curated result files and figures (small, committable) from the run outputs to
+    results/<name>/: `main` from data/results/, any other name from data/results/<name>/
+    (e.g. ablation, learning_curve)."""
     from tfimpact.evaluation.export import export_results
 
+    src = cfg().paths.outputs if name == "main" else cfg().paths.outputs / name
+    if not src.is_dir():
+        raise typer.BadParameter(f"no run outputs in {src}")
     to = cfg().paths.results / name
-    files = export_results(cfg().paths.outputs, to)
+    files = export_results(src, to)
     for p in files:
         out(f"copied {p}")
     out(f"{len(files)} files -> {to}")
 
 
 @app.command()
-def recommend() -> None:
-    """Recommend co-changes for a block in a local repository."""
-    _todo("recommend")
+def recommend(
+    repo: Path = typer.Option(Path("."), "--repo", help="Local git repository with .tf files"),
+    block: str = typer.Option(
+        None, "--block", help="Seed block: full address or short form (aws_s3_bucket.logs)"
+    ),
+    diff: bool = typer.Option(
+        False, "--diff", help="Seeds = blocks changed in the working tree vs HEAD"
+    ),
+    top: int = typer.Option(None, help="Suggestions per list (default recommend.top)"),
+    explain: bool = typer.Option(False, "--explain", help="Show the top feature contributions"),
+    model: Path = typer.Option(None, help="Model file (default models/ga_weights.json)"),
+    as_json: bool = typer.Option(False, "--json", help="Print JSON instead of tables"),
+) -> None:
+    """Recommend which blocks to modify and which block types to add, for an edited block."""
+    import json
+
+    from rich.table import Table
+
+    from tfimpact.inference.recommend import Model, RecommendError
+    from tfimpact.inference.recommend import recommend as run_recommend
+
+    c = cfg()
+    try:
+        m = Model.load(model or c.paths.models / "ga_weights.json")
+        res = run_recommend(repo.resolve(), c, m, block=block, diff=diff, top=top)
+    except RecommendError as e:
+        raise typer.BadParameter(str(e)) from e
+    if as_json:
+        console.print_json(json.dumps(res.to_dict()))
+        return
+    out(f"[bold]{res.repo}[/] @ {res.head_sha[:10]}  ({res.n_commits} commits mined)")
+    out("seeds: " + ", ".join(f"{act} {a}" for a, act in res.seeds))
+    for err in res.errors:
+        out(f"[yellow]warning:[/] {err}")
+    for title, rows in (("Blocks to modify", res.modify), ("Block types to add", res.add_types)):
+        t = Table(title=title, title_justify="left")
+        t.add_column("#", justify="right")
+        t.add_column("candidate")
+        if rows is res.modify:
+            t.add_column("file")
+        t.add_column("score", justify="right")
+        if explain:
+            t.add_column("top contributions")
+        for i, s in enumerate(rows, 1):
+            cells = [str(i), s.candidate]
+            if rows is res.modify:
+                cells.append(s.file)
+            cells.append(f"{s.score:.3f}")
+            if explain:
+                parts = s.contributions[: c.recommend.explain_top]
+                cells.append(", ".join(f"{k.split('_', 1)[1]} {v:.3f}" for k, v in parts))
+            t.add_row(*cells)
+        console.print(t)
