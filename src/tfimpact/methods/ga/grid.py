@@ -41,6 +41,14 @@ def grid_configs(base: GAConfig) -> list[GAConfig]:
     ]
 
 
+def config_by_id(base: GAConfig, cid: str) -> GAConfig:
+    """The grid configuration with this id (as written in `grid.csv`)."""
+    for c in grid_configs(base):
+        if config_id(c) == cid:
+            return c
+    raise ValueError(f"{cid!r} is not a configuration of the current grid")
+
+
 def tune(
     train: Sequence[RepoData],
     names: list[str],

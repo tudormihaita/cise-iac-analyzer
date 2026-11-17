@@ -11,7 +11,7 @@ method.py     `GAMethod`, the evaluation method and its variants
 
 from tfimpact.methods.ga.data import Batch, TrainSet
 from tfimpact.methods.ga.fitness import fitness, scores
-from tfimpact.methods.ga.grid import config_id, grid_configs
+from tfimpact.methods.ga.grid import config_by_id, config_id, grid_configs
 from tfimpact.methods.ga.method import VARIANTS, GAMethod
 from tfimpact.methods.ga.operators import random_individual, repair
 from tfimpact.methods.ga.runs import load_run, run_rng, save_run, settings_hash
@@ -23,6 +23,7 @@ __all__ = [
     "EvolveResult",
     "GAMethod",
     "TrainSet",
+    "config_by_id",
     "config_id",
     "evolve",
     "fitness",

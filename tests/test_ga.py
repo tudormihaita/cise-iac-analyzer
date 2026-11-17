@@ -199,3 +199,54 @@ def test_grid_configs_cover_the_product():
     assert len({G.config_id(c) for c in configs}) == len(configs)
     default = G.config_id(cfg.ga)
     assert default in {G.config_id(c) for c in configs}  # SPEC defaults are a grid point
+
+
+def test_feature_subset_learns_and_ranks_with_those_features_only(tmp_path):
+    cfg = _cfg(tmp_path)
+    graph = [n for n in NAMES if n.startswith("graph_")]
+    m = G.GAMethod(cfg, "ga", name="ga_graph", features=graph).fit([_repo("a", 20, 1)], fold=0)
+    assert all(list(r["weights"]) == graph for r in m.runs)
+    assert len(m.rank_all(_repo("t", 5, 9))[0].scores) == 60
+    full = G.GAMethod(cfg, "ga").fit([_repo("a", 20, 1)], fold=0)
+    assert {p.parent.name.split("_")[0] for p in (tmp_path / "ga_runs").rglob("*.json")} == {"ga"}
+    assert len({p.parent for p in (tmp_path / "ga_runs").rglob("*.json")}) == 2  # own run files
+    assert full.runs[0]["weights"] != m.runs[0]["weights"]
+    with pytest.raises(ValueError):
+        G.GAMethod(cfg, "ga", features=[])
+    with pytest.raises(ValueError):
+        G.GAMethod(cfg, "ga", train_frac=1.5)
+
+
+def test_train_frac_draws_nested_subsets_and_records_their_size(tmp_path):
+    cfg = _cfg(tmp_path)
+    train = [_repo(n, 10, i) for i, n in enumerate("abcdefgh")]
+    small = G.GAMethod(cfg, "ga", name="lc25", train_frac=0.25)
+    large = G.GAMethod(cfg, "ga", name="lc50", train_frac=0.5)
+    for s in range(3):
+        a = {d.repo for d in small.train_subset(train, 0, s)}
+        b = {d.repo for d in large.train_subset(train, 0, s)}
+        assert len(a) == 2 and len(b) == 4 and a < b
+    draws = [{d.repo for d in small.train_subset(train, 0, s)} for s in range(3)]
+    assert len({frozenset(d) for d in draws}) > 1  # draws differ
+    assert {d.repo for d in small.train_subset(list(reversed(train)), 0, 0)} == draws[0]
+    m = small.fit(train, fold=0)
+    assert [r["n_train_repos"] for r in m.runs] == [2] * cfg.evaluation.seeds
+    assert len(G.GAMethod(cfg, "ga").train_subset(train, 0, 0)) == 8
+
+
+def test_fixed_configuration_reuses_the_tuned_runs(tmp_path, monkeypatch):
+    cfg = _small_grid(_cfg(tmp_path))
+    train = [_repo(n, 15, i) for i, n in enumerate("abcd")]
+    tuned = G.GAMethod(cfg, "ga").fit(train, fold=0)
+
+    def boom(*a, **k):
+        raise AssertionError("should have been loaded from disk")
+
+    monkeypatch.setattr("tfimpact.methods.ga.method.evolve", boom)
+    monkeypatch.setattr("tfimpact.methods.ga.grid.evolve", boom)
+    fixed = G.GAMethod(cfg, "ga", fixed={0: tuned.chosen}, n_seeds=1).fit(train, fold=0)
+    assert fixed.runs[0]["weights"] == tuned.runs[0]["weights"] and not fixed.tuning
+    assert fixed.params()["chosen"] == tuned.chosen
+    assert G.config_id(G.config_by_id(cfg.ga, tuned.chosen)) == tuned.chosen
+    with pytest.raises(ValueError):
+        G.config_by_id(cfg.ga, "p1g1_m0.0_c0.0")

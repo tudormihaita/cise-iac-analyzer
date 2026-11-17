@@ -30,7 +30,8 @@ def plot_learned_weights(lw: pd.DataFrame, method: str, path: Path) -> Path | No
     sub = lw[lw.method == method] if len(lw) else lw
     if plt is None or sub.empty:
         return None
-    cols = [c for c in sub.columns if c not in ("method", "fold", "seed", "fitness")]
+    skip = ("method", "fold", "seed", "fitness", "n_train_repos")
+    cols = [c for c in sub.columns if c not in skip and sub[c].notna().any()]
     stats = sub[cols].agg(["mean", "std"]).T
     fig, ax = plt.subplots(figsize=(7, 4.5))
     y = range(len(stats))
@@ -79,6 +80,29 @@ def plot_seed_action(breakdowns: pd.DataFrame, methods: list[str], path: Path) -
     ax.set_ylabel("MRR (all targets, core repos)")
     ax.set_title("MRR by seed action")
     ax.legend(fontsize=8)
+    return _save(fig, plt, path)
+
+
+def plot_learning_curve(table: pd.DataFrame, path: Path) -> Path | None:
+    """Test MRR (core repos, 95% CI over repos) and training-fitness MRR vs the number of
+    training repos (rows of `studies.learning_curve_table`)."""
+    plt = _plt()
+    if plt is None or table.empty:
+        return None
+    fig, ax = plt.subplots(figsize=(7, 4))
+    for target, label in (("all", "test, all targets"), ("existing", "test, existing blocks")):
+        t = table[table.target == target].sort_values("n_train_repos")
+        ax.plot(t.n_train_repos, t.mrr, marker="o", label=label)
+        ax.fill_between(t.n_train_repos, t.ci_low, t.ci_high, alpha=0.2)
+    t = table[table.target == "all"].sort_values("n_train_repos")
+    ax.plot(t.n_train_repos, t.train_fitness, ls="--", marker="s", label="training (fitness)")
+    for x, f in zip(t.n_train_repos, t.train_frac, strict=True):
+        ax.annotate(f"{f:.0%}", (x, ax.get_ylim()[0]), textcoords="offset points", xytext=(0, 4),
+                    ha="center", fontsize=8, color="grey")  # fmt: skip
+    ax.set_xlabel("training repos per fold (mean)")
+    ax.set_ylabel("MRR")
+    ax.set_title("Learning curve (GA, mean over folds and draws)")
+    ax.legend(loc="center right", fontsize=8)
     return _save(fig, plt, path)
 
 

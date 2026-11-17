@@ -1,0 +1,2048 @@
+{
+  "created": "2026-11-18T01:18:41",
+  "methods": [
+    "ga_lc10",
+    "ga_lc25",
+    "ga_lc50",
+    "ga_lc75",
+    "ga"
+  ],
+  "n_repos": {
+    "core": 53,
+    "add_only": 8
+  },
+  "folds": {
+    "Young-ook__terraform-aws-eks": 0,
+    "alphagov__govuk-aws": 0,
+    "aws-ia__terraform-aws-vpc": 0,
+    "chadgeary__cloudoffice": 0,
+    "gitops-bridge-dev__gitops-bridge": 0,
+    "terraform-aws-modules__terraform-aws-alb": 0,
+    "terraform-aws-modules__terraform-aws-ecs": 0,
+    "terraform-aws-modules__terraform-aws-eks": 0,
+    "terraform-aws-modules__terraform-aws-lambda": 0,
+    "terraform-aws-modules__terraform-aws-vpc": 0,
+    "BigDataBoutique__elasticsearch-cloud-deploy": 1,
+    "ExpediaDotCom__haystack": 1,
+    "SUSE__ha-sap-terraform-deployments": 1,
+    "cloudposse__terraform-aws-eks-cluster": 1,
+    "cogini__multi-env-deploy": 1,
+    "coreos__tectonic-installer": 1,
+    "getamis__vishwakarma": 1,
+    "maddevsio__aws-eks-base": 1,
+    "particuleio__terraform-kubernetes-addons": 1,
+    "poseidon__typhoon": 1,
+    "GoogleCloudPlatform__anthos-samples": 2,
+    "SebastianUA__terraform": 2,
+    "aws-samples__terraform-eks-code": 2,
+    "awslabs__data-on-eks": 2,
+    "cloudposse__terraform-aws-s3-bucket": 2,
+    "fpco__terraform-aws-foundation": 2,
+    "in4it__terraform-modules": 2,
+    "kbst__terraform-kubestack": 2,
+    "rust-lang__simpleinfra": 2,
+    "terraform-aws-modules__terraform-aws-rds-aurora": 2,
+    "terraform-aws-modules__terraform-aws-s3-bucket": 2,
+    "aws-ia__terraform-aws-eks-blueprints": 3,
+    "aws-observability__terraform-aws-observability-accelerator": 3,
+    "cattle-ops__terraform-aws-gitlab-runner": 3,
+    "kubernetes__k8s.io": 3,
+    "kz8s__tack": 3,
+    "ministryofjustice__modernisation-platform": 3,
+    "philips-labs__terraform-aws-github-runner": 3,
+    "tensult__terraform": 3,
+    "terraform-aws-modules__terraform-aws-iam": 3,
+    "travis-ci__terraform-config": 3,
+    "trussworks__terraform-layout-example": 3,
+    "alphagov__govuk-infrastructure": 4,
+    "aws-observability__aws-otel-lambda": 4,
+    "aws-samples__eks-workshop-v2": 4,
+    "chadgeary__cloudblock": 4,
+    "cloudposse__terraform-aws-components": 4,
+    "cloudposse__terraform-aws-dynamic-subnets": 4,
+    "cloudposse__terraform-aws-ecs-alb-service-task": 4,
+    "fortinet__fortigate-terraform-deploy": 4,
+    "nozaq__terraform-aws-secure-baseline": 4,
+    "thoughtbot__flightdeck": 4,
+    "zenml-io__mlstacks": 4
+  },
+  "held_out": [
+    "antonputra__tutorials",
+    "HXSecurity__TerraformGoat",
+    "ned1313__terraform-tuesdays",
+    "devopsacademyau__academy",
+    "ManagedKube__kubernetes-ops",
+    "hashicorp__terraform-provider-awscc",
+    "localstack-samples__localstack-terraform-samples",
+    "alfonsof__terraform-aws-examples"
+  ],
+  "method_params": {
+    "0": {
+      "ga_lc10": {
+        "config": "p30g120_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 0,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.010825775814171823,
+              "hist_cochange_count": 0.0804956406510786,
+              "hist_cochange_recency": 0.11283815261404133,
+              "hist_cand_recent_changes": 0.013725111915752446,
+              "hist_file_cochange_conf": 0.0019514128415646914,
+              "hist_type_cochange_conf": 0.2097313490267619,
+              "graph_proximity": 0.08572834537438513,
+              "graph_shared_neighbors": 0.01684139432709682,
+              "graph_cand_degree": 0.005470809141203369,
+              "graph_propagation_conf": 0.19214349408179188,
+              "text_name_similarity": 0.016723850280041766,
+              "text_content_similarity": 0.2535246639321102
+            },
+            "offset": 0.21134467817082433,
+            "fitness": 0.7907292844325858,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          },
+          {
+            "fold": 0,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.0014942020099879129,
+              "hist_cochange_count": 0.12104612018580206,
+              "hist_cochange_recency": 0.008155025541686761,
+              "hist_cand_recent_changes": 0.03498518464155324,
+              "hist_file_cochange_conf": 0.043724568836985875,
+              "hist_type_cochange_conf": 0.3239022055442031,
+              "graph_proximity": 0.00210685531548666,
+              "graph_shared_neighbors": 0.039919846387288856,
+              "graph_cand_degree": 0.09693246926309079,
+              "graph_propagation_conf": 0.0,
+              "text_name_similarity": 0.04215507997998141,
+              "text_content_similarity": 0.2855784422939333
+            },
+            "offset": 0.37917547984314565,
+            "fitness": 0.8023705218541192,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          },
+          {
+            "fold": 0,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.008494107473761298,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.07958872480286357,
+              "hist_cand_recent_changes": 0.0,
+              "hist_file_cochange_conf": 0.048902340147259186,
+              "hist_type_cochange_conf": 0.18023125709108553,
+              "graph_proximity": 0.22934383791289215,
+              "graph_shared_neighbors": 0.05905494433041545,
+              "graph_cand_degree": 0.0004506833610976484,
+              "graph_propagation_conf": 0.13973278407788367,
+              "text_name_similarity": 0.04410120585002209,
+              "text_content_similarity": 0.21010011495271938
+            },
+            "offset": 0.3098595465337879,
+            "fitness": 0.7426297036794802,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.8"
+      },
+      "ga_lc25": {
+        "config": "p30g120_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 0,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.004936826417424772,
+              "hist_cochange_count": 0.002130569100055848,
+              "hist_cochange_recency": 0.10054973387878709,
+              "hist_cand_recent_changes": 0.03692479998513143,
+              "hist_file_cochange_conf": 0.008702697329898966,
+              "hist_type_cochange_conf": 0.15760343700070836,
+              "graph_proximity": 0.07928272277472367,
+              "graph_shared_neighbors": 0.048154174775800807,
+              "graph_cand_degree": 0.0,
+              "graph_propagation_conf": 0.3034707708882478,
+              "text_name_similarity": 0.002270443114300255,
+              "text_content_similarity": 0.25597382473492103
+            },
+            "offset": 0.2584791979540896,
+            "fitness": 0.754395082651881,
+            "evaluations": 3630,
+            "n_train_repos": 11
+          },
+          {
+            "fold": 0,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.07352799961048082,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.051293971172527354,
+              "hist_cand_recent_changes": 0.017362943977026684,
+              "hist_file_cochange_conf": 0.0832557423091925,
+              "hist_type_cochange_conf": 0.207842214391565,
+              "graph_proximity": 0.0001749792989528182,
+              "graph_shared_neighbors": 0.06636080864768032,
+              "graph_cand_degree": 0.06157898546172916,
+              "graph_propagation_conf": 0.23640568948077725,
+              "text_name_similarity": 0.0049485153526276065,
+              "text_content_similarity": 0.1972481502974405
+            },
+            "offset": 0.2377128379303252,
+            "fitness": 0.7763716493717877,
+            "evaluations": 3630,
+            "n_train_repos": 11
+          },
+          {
+            "fold": 0,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.14937081327571036,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 2.8565380410105534e-05,
+              "hist_cand_recent_changes": 0.009624717364408085,
+              "hist_file_cochange_conf": 0.06850258218146162,
+              "hist_type_cochange_conf": 0.16471138153868106,
+              "graph_proximity": 0.06409260595600906,
+              "graph_shared_neighbors": 0.054617524450326894,
+              "graph_cand_degree": 0.01608942109053756,
+              "graph_propagation_conf": 0.22884456542824663,
+              "text_name_similarity": 0.0218235729605486,
+              "text_content_similarity": 0.22229425037366013
+            },
+            "offset": 0.261690190498817,
+            "fitness": 0.7389015392772023,
+            "evaluations": 3630,
+            "n_train_repos": 11
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.8"
+      },
+      "ga_lc50": {
+        "config": "p30g120_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 0,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.015315464046808768,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.07163061655090497,
+              "hist_cand_recent_changes": 0.01358882961254299,
+              "hist_file_cochange_conf": 0.04414128817131257,
+              "hist_type_cochange_conf": 0.20799374970999415,
+              "graph_proximity": 0.016881603546808073,
+              "graph_shared_neighbors": 0.06616854162621053,
+              "graph_cand_degree": 0.020366886321467936,
+              "graph_propagation_conf": 0.3593544104112094,
+              "text_name_similarity": 0.001559359284352001,
+              "text_content_similarity": 0.18299925071838874
+            },
+            "offset": 0.19964080023967118,
+            "fitness": 0.7620965083772729,
+            "evaluations": 3630,
+            "n_train_repos": 22
+          },
+          {
+            "fold": 0,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.012286809122614773,
+              "hist_cochange_count": 0.020652349575089837,
+              "hist_cochange_recency": 0.05530131534522102,
+              "hist_cand_recent_changes": 0.02823224733010838,
+              "hist_file_cochange_conf": 0.012906060415494658,
+              "hist_type_cochange_conf": 0.18314784361314704,
+              "graph_proximity": 0.029377213735206378,
+              "graph_shared_neighbors": 0.05796822102585469,
+              "graph_cand_degree": 0.04605403304239767,
+              "graph_propagation_conf": 0.3736780154906768,
+              "text_name_similarity": 0.013000417017244057,
+              "text_content_similarity": 0.1673954742869447
+            },
+            "offset": 0.2069786820387229,
+            "fitness": 0.7719603271858895,
+            "evaluations": 3630,
+            "n_train_repos": 22
+          },
+          {
+            "fold": 0,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.03672202592505749,
+              "hist_cochange_count": 0.002330498826693957,
+              "hist_cochange_recency": 0.07190015808900306,
+              "hist_cand_recent_changes": 0.015034542949228296,
+              "hist_file_cochange_conf": 0.015851876770557157,
+              "hist_type_cochange_conf": 0.14164621239785127,
+              "graph_proximity": 0.09273724670771638,
+              "graph_shared_neighbors": 0.058628602420197254,
+              "graph_cand_degree": 0.009136338834654598,
+              "graph_propagation_conf": 0.33874866984473,
+              "text_name_similarity": 0.003295129610241565,
+              "text_content_similarity": 0.21396869762406887
+            },
+            "offset": 0.2321721751211538,
+            "fitness": 0.7576863247596836,
+            "evaluations": 3630,
+            "n_train_repos": 22
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.8"
+      },
+      "ga_lc75": {
+        "config": "p30g120_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 0,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.0018678066864651337,
+              "hist_cochange_count": 0.03250582427981064,
+              "hist_cochange_recency": 0.025277001964598426,
+              "hist_cand_recent_changes": 0.011440570453012193,
+              "hist_file_cochange_conf": 0.051614889508625875,
+              "hist_type_cochange_conf": 0.22612720557294033,
+              "graph_proximity": 0.05333400598469437,
+              "graph_shared_neighbors": 0.05275320689973797,
+              "graph_cand_degree": 0.03872226344312795,
+              "graph_propagation_conf": 0.29974107938231903,
+              "text_name_similarity": 0.012721052324958378,
+              "text_content_similarity": 0.19389509349970968
+            },
+            "offset": 0.2159281051340603,
+            "fitness": 0.7563178392907501,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          },
+          {
+            "fold": 0,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.09159738399371457,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.049903197046545666,
+              "hist_cand_recent_changes": 0.011546684481181733,
+              "hist_file_cochange_conf": 0.014398264787519897,
+              "hist_type_cochange_conf": 0.15923938470008797,
+              "graph_proximity": 0.14830521869004262,
+              "graph_shared_neighbors": 0.05886336160481343,
+              "graph_cand_degree": 0.004962243201042024,
+              "graph_propagation_conf": 0.24571585487384243,
+              "text_name_similarity": 0.004521045453075735,
+              "text_content_similarity": 0.21094736116813395
+            },
+            "offset": 0.2409583650606045,
+            "fitness": 0.7559685568881642,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          },
+          {
+            "fold": 0,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.08516914117948476,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.05708826596355001,
+              "hist_cand_recent_changes": 0.012239663969435878,
+              "hist_file_cochange_conf": 0.004878164512231047,
+              "hist_type_cochange_conf": 0.18234404963321832,
+              "graph_proximity": 0.0627552315487352,
+              "graph_shared_neighbors": 0.04554379231223885,
+              "graph_cand_degree": 0.04726809600774929,
+              "graph_propagation_conf": 0.3016721882880115,
+              "text_name_similarity": 0.014677599513349323,
+              "text_content_similarity": 0.1863638070719958
+            },
+            "offset": 0.2167064664682169,
+            "fitness": 0.7483948990673633,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.8"
+      },
+      "ga": {
+        "config": "p30g120_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 0,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.034798592273637935,
+              "hist_cochange_count": 0.011379722282449163,
+              "hist_cochange_recency": 0.04911193556168815,
+              "hist_cand_recent_changes": 0.023778540590518205,
+              "hist_file_cochange_conf": 0.009940588775355726,
+              "hist_type_cochange_conf": 0.2361664578374959,
+              "graph_proximity": 0.060949074547642874,
+              "graph_shared_neighbors": 0.05913197440706731,
+              "graph_cand_degree": 0.023506942242396717,
+              "graph_propagation_conf": 0.3082988431580249,
+              "text_name_similarity": 0.018313478347155025,
+              "text_content_similarity": 0.16462384997656795
+            },
+            "offset": 0.2099537311399961,
+            "fitness": 0.7511828902111913,
+            "evaluations": 3630
+          },
+          {
+            "fold": 0,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.004984571243359285,
+              "hist_cochange_count": 0.04923130070654038,
+              "hist_cochange_recency": 0.06755368777708977,
+              "hist_cand_recent_changes": 0.00786489905222872,
+              "hist_file_cochange_conf": 0.03292344375154738,
+              "hist_type_cochange_conf": 0.17223466277838614,
+              "graph_proximity": 0.0766538209480621,
+              "graph_shared_neighbors": 0.04659657312879405,
+              "graph_cand_degree": 0.023910127323107117,
+              "graph_propagation_conf": 0.28376736671819686,
+              "text_name_similarity": 0.006069437199301739,
+              "text_content_similarity": 0.22821010937338662
+            },
+            "offset": 0.24977039141280427,
+            "fitness": 0.7625485252774628,
+            "evaluations": 3630
+          },
+          {
+            "fold": 0,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.08855205066021656,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.06135596769706136,
+              "hist_cand_recent_changes": 0.020982129719232478,
+              "hist_file_cochange_conf": 5.574909970640345e-05,
+              "hist_type_cochange_conf": 0.27249976665051434,
+              "graph_proximity": 0.018911667091835956,
+              "graph_shared_neighbors": 0.0783968304091673,
+              "graph_cand_degree": 0.042813244734764916,
+              "graph_propagation_conf": 0.2280865213464576,
+              "text_name_similarity": 0.025720464355208333,
+              "text_content_similarity": 0.16262560823583486
+            },
+            "offset": 0.21324136227941146,
+            "fitness": 0.7567041851950626,
+            "evaluations": 3630
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.8"
+      }
+    },
+    "1": {
+      "ga_lc10": {
+        "config": "p60g60_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 1,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.028897749253290042,
+              "hist_cochange_count": 0.018323487483320727,
+              "hist_cochange_recency": 0.11171889503891537,
+              "hist_cand_recent_changes": 0.00921183088068987,
+              "hist_file_cochange_conf": 0.00029792521423891534,
+              "hist_type_cochange_conf": 0.10956584626676234,
+              "graph_proximity": 0.005223904402627374,
+              "graph_shared_neighbors": 0.10482331087175674,
+              "graph_cand_degree": 0.004456863866710633,
+              "graph_propagation_conf": 0.2817650155145875,
+              "text_name_similarity": 0.0012217551940513457,
+              "text_content_similarity": 0.32449341601304915
+            },
+            "offset": 0.3046253819524579,
+            "fitness": 0.7381693654352015,
+            "evaluations": 3660,
+            "n_train_repos": 4
+          },
+          {
+            "fold": 1,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.0037657897814356166,
+              "hist_cochange_count": 0.0006780877064902663,
+              "hist_cochange_recency": 0.06427761537194913,
+              "hist_cand_recent_changes": 0.04416636137558052,
+              "hist_file_cochange_conf": 0.01619533251447296,
+              "hist_type_cochange_conf": 0.22119090549029266,
+              "graph_proximity": 0.024143755224963544,
+              "graph_shared_neighbors": 0.0878185491311114,
+              "graph_cand_degree": 0.026725435141056225,
+              "graph_propagation_conf": 0.32297875880509247,
+              "text_name_similarity": 0.004054171555866997,
+              "text_content_similarity": 0.1840052379016882
+            },
+            "offset": 0.22259444056797426,
+            "fitness": 0.7486016092775609,
+            "evaluations": 3660,
+            "n_train_repos": 4
+          },
+          {
+            "fold": 1,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.14950466995976214,
+              "hist_cochange_count": 0.00036681107490041636,
+              "hist_cochange_recency": 0.004682266731495479,
+              "hist_cand_recent_changes": 0.005909688450252114,
+              "hist_file_cochange_conf": 0.05999867195042082,
+              "hist_type_cochange_conf": 0.27939746191304504,
+              "graph_proximity": 0.006207724496106447,
+              "graph_shared_neighbors": 0.13489828254210223,
+              "graph_cand_degree": 0.031605214327926505,
+              "graph_propagation_conf": 0.21864589823228103,
+              "text_name_similarity": 0.006635579434439685,
+              "text_content_similarity": 0.10214773088726822
+            },
+            "offset": 0.20499973244497519,
+            "fitness": 0.7876601826234847,
+            "evaluations": 3660,
+            "n_train_repos": 4
+          }
+        ],
+        "chosen": "p60g60_m0.1_c0.8"
+      },
+      "ga_lc25": {
+        "config": "p60g60_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 1,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.06398715921185229,
+              "hist_cochange_count": 0.004576960234183361,
+              "hist_cochange_recency": 8.910576419284096e-05,
+              "hist_cand_recent_changes": 0.04073863597587219,
+              "hist_file_cochange_conf": 0.02502769922286983,
+              "hist_type_cochange_conf": 0.23311736971820746,
+              "graph_proximity": 0.034951413946324436,
+              "graph_shared_neighbors": 0.05845136579351545,
+              "graph_cand_degree": 0.024025292932934986,
+              "graph_propagation_conf": 0.36366660270445034,
+              "text_name_similarity": 0.011309890920214057,
+              "text_content_similarity": 0.1400585035753826
+            },
+            "offset": 0.15950792452162546,
+            "fitness": 0.7346088603439118,
+            "evaluations": 3660,
+            "n_train_repos": 11
+          },
+          {
+            "fold": 1,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.00023543596151784,
+              "hist_cochange_count": 0.022980865867474064,
+              "hist_cochange_recency": 0.035808572138565885,
+              "hist_cand_recent_changes": 0.025188362492144102,
+              "hist_file_cochange_conf": 0.07866438003581136,
+              "hist_type_cochange_conf": 0.20573340228946266,
+              "graph_proximity": 0.07315346895595971,
+              "graph_shared_neighbors": 0.054648965773785835,
+              "graph_cand_degree": 0.04174973545299292,
+              "graph_propagation_conf": 0.2639746125238382,
+              "text_name_similarity": 0.009871242287381501,
+              "text_content_similarity": 0.18799095622106593
+            },
+            "offset": 0.2274368071519513,
+            "fitness": 0.7537227580701148,
+            "evaluations": 3660,
+            "n_train_repos": 11
+          },
+          {
+            "fold": 1,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.0013274041309196945,
+              "hist_cochange_count": 0.00015820822986101313,
+              "hist_cochange_recency": 0.10688321964835844,
+              "hist_cand_recent_changes": 0.00031833639466475515,
+              "hist_file_cochange_conf": 0.01554546135406559,
+              "hist_type_cochange_conf": 0.22184437576010246,
+              "graph_proximity": 0.09980465510785244,
+              "graph_shared_neighbors": 0.07352262345705539,
+              "graph_cand_degree": 0.0028881325936346504,
+              "graph_propagation_conf": 0.2696964170322377,
+              "text_name_similarity": 0.010134329194265386,
+              "text_content_similarity": 0.19787683709698245
+            },
+            "offset": 0.23346649301403255,
+            "fitness": 0.7891822259096072,
+            "evaluations": 3660,
+            "n_train_repos": 11
+          }
+        ],
+        "chosen": "p60g60_m0.1_c0.8"
+      },
+      "ga_lc50": {
+        "config": "p60g60_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 1,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.0797008934950929,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.0,
+              "hist_cand_recent_changes": 0.017420035338367154,
+              "hist_file_cochange_conf": 0.044158167801310384,
+              "hist_type_cochange_conf": 0.25158307085087633,
+              "graph_proximity": 0.07771948617243389,
+              "graph_shared_neighbors": 0.04475869655084451,
+              "graph_cand_degree": 0.048493013339235336,
+              "graph_propagation_conf": 0.2631285414932492,
+              "text_name_similarity": 0.019580454396441672,
+              "text_content_similarity": 0.1534576405621487
+            },
+            "offset": 0.19344310314627994,
+            "fitness": 0.7390125508509935,
+            "evaluations": 3660,
+            "n_train_repos": 22
+          },
+          {
+            "fold": 1,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.02070052994782109,
+              "hist_cochange_count": 0.05868942955150072,
+              "hist_cochange_recency": 0.0077577864645704785,
+              "hist_cand_recent_changes": 0.03983451652611658,
+              "hist_file_cochange_conf": 0.0259762385090132,
+              "hist_type_cochange_conf": 0.2518475165766466,
+              "graph_proximity": 0.07795770966517825,
+              "graph_shared_neighbors": 0.06074067823086196,
+              "graph_cand_degree": 0.017016535896457633,
+              "graph_propagation_conf": 0.2440760857481117,
+              "text_name_similarity": 0.007868221183427278,
+              "text_content_similarity": 0.1875347517002944
+            },
+            "offset": 0.2396864221056662,
+            "fitness": 0.737105506934471,
+            "evaluations": 3660,
+            "n_train_repos": 22
+          },
+          {
+            "fold": 1,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.025925941264806466,
+              "hist_cochange_count": 0.0043552113265053006,
+              "hist_cochange_recency": 0.058902339195329854,
+              "hist_cand_recent_changes": 0.02885939558157072,
+              "hist_file_cochange_conf": 0.05750143731778042,
+              "hist_type_cochange_conf": 0.16659145884631207,
+              "graph_proximity": 5.9953243766974596e-05,
+              "graph_shared_neighbors": 0.07253997207688165,
+              "graph_cand_degree": 0.07004541267226698,
+              "graph_propagation_conf": 0.30401068545647725,
+              "text_name_similarity": 0.01701120885224227,
+              "text_content_similarity": 0.19419698416606004
+            },
+            "offset": 0.23238199513395005,
+            "fitness": 0.7512893905074786,
+            "evaluations": 3660,
+            "n_train_repos": 22
+          }
+        ],
+        "chosen": "p60g60_m0.1_c0.8"
+      },
+      "ga_lc75": {
+        "config": "p60g60_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 1,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.045023006699163814,
+              "hist_cochange_count": 0.04063134737087667,
+              "hist_cochange_recency": 0.035377298322481314,
+              "hist_cand_recent_changes": 0.004220791996502679,
+              "hist_file_cochange_conf": 0.007379737803858283,
+              "hist_type_cochange_conf": 0.199091689447557,
+              "graph_proximity": 0.00760105566575087,
+              "graph_shared_neighbors": 0.07555776739767804,
+              "graph_cand_degree": 0.038084260536820264,
+              "graph_propagation_conf": 0.3446466363834535,
+              "text_name_similarity": 0.0014895825701278656,
+              "text_content_similarity": 0.2008968258057297
+            },
+            "offset": 0.22885730989391515,
+            "fitness": 0.7409289065415051,
+            "evaluations": 3660,
+            "n_train_repos": 32
+          },
+          {
+            "fold": 1,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.03393586839540357,
+              "hist_cochange_count": 0.01954113058140931,
+              "hist_cochange_recency": 0.00099589985780315,
+              "hist_cand_recent_changes": 0.010987626026096878,
+              "hist_file_cochange_conf": 0.07829523112410584,
+              "hist_type_cochange_conf": 0.245895864151372,
+              "graph_proximity": 0.061094406934919236,
+              "graph_shared_neighbors": 0.052449266351570725,
+              "graph_cand_degree": 0.041953160956493984,
+              "graph_propagation_conf": 0.2736161205817569,
+              "text_name_similarity": 0.03172339100099898,
+              "text_content_similarity": 0.14951203403806942
+            },
+            "offset": 0.20788943628120585,
+            "fitness": 0.7413538018733963,
+            "evaluations": 3660,
+            "n_train_repos": 32
+          },
+          {
+            "fold": 1,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.08088169261970055,
+              "hist_cochange_count": 0.00593580648670445,
+              "hist_cochange_recency": 0.02198331333578688,
+              "hist_cand_recent_changes": 0.029211531213785242,
+              "hist_file_cochange_conf": 0.015251423680587626,
+              "hist_type_cochange_conf": 0.2008612783214171,
+              "graph_proximity": 0.09597695779468057,
+              "graph_shared_neighbors": 0.07334528246814125,
+              "graph_cand_degree": 0.012624305401490822,
+              "graph_propagation_conf": 0.27685572923341706,
+              "text_name_similarity": 0.0032101874343618505,
+              "text_content_similarity": 0.18386249200992666
+            },
+            "offset": 0.2243759713608355,
+            "fitness": 0.7448991082457073,
+            "evaluations": 3660,
+            "n_train_repos": 32
+          }
+        ],
+        "chosen": "p60g60_m0.1_c0.8"
+      },
+      "ga": {
+        "config": "p60g60_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 1,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.017126553095228574,
+              "hist_cochange_count": 0.00017446499421261812,
+              "hist_cochange_recency": 0.06679111084227152,
+              "hist_cand_recent_changes": 0.024718724212085454,
+              "hist_file_cochange_conf": 0.04443686238266347,
+              "hist_type_cochange_conf": 0.18552737185896473,
+              "graph_proximity": 0.1427831504970374,
+              "graph_shared_neighbors": 0.05548734905203003,
+              "graph_cand_degree": 0.027387531312291342,
+              "graph_propagation_conf": 0.22166620971699103,
+              "text_name_similarity": 0.006927012502717936,
+              "text_content_similarity": 0.20697365953350616
+            },
+            "offset": 0.25151662497930116,
+            "fitness": 0.7313542766231573,
+            "evaluations": 3660
+          },
+          {
+            "fold": 1,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.015114569687371135,
+              "hist_cochange_count": 0.009270701631949261,
+              "hist_cochange_recency": 0.05584072857222708,
+              "hist_cand_recent_changes": 0.024018951137427698,
+              "hist_file_cochange_conf": 0.06882077417108672,
+              "hist_type_cochange_conf": 0.2231393710020949,
+              "graph_proximity": 0.0723982616850464,
+              "graph_shared_neighbors": 0.054395435483484376,
+              "graph_cand_degree": 0.05724158670712573,
+              "graph_propagation_conf": 0.2436633345724074,
+              "text_name_similarity": 0.006757752254891874,
+              "text_content_similarity": 0.16933853309488742
+            },
+            "offset": 0.20661717518837427,
+            "fitness": 0.7361784331232808,
+            "evaluations": 3660
+          },
+          {
+            "fold": 1,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.09072976770881346,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.021963309004076507,
+              "hist_cand_recent_changes": 0.022625888313466774,
+              "hist_file_cochange_conf": 0.029161558311251577,
+              "hist_type_cochange_conf": 0.20345232509851402,
+              "graph_proximity": 0.08162080893716187,
+              "graph_shared_neighbors": 0.05924098561522729,
+              "graph_cand_degree": 0.02749099243447962,
+              "graph_propagation_conf": 0.2750637350206562,
+              "text_name_similarity": 0.0017757769514884626,
+              "text_content_similarity": 0.1868748526048642
+            },
+            "offset": 0.21563976125945689,
+            "fitness": 0.7414942259530918,
+            "evaluations": 3660
+          }
+        ],
+        "chosen": "p60g60_m0.1_c0.8"
+      }
+    },
+    "2": {
+      "ga_lc10": {
+        "config": "p30g120_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 2,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.04911179951289945,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.06666210404421405,
+              "hist_cand_recent_changes": 0.005927623420957892,
+              "hist_file_cochange_conf": 6.915339522413271e-07,
+              "hist_type_cochange_conf": 0.13263148214877338,
+              "graph_proximity": 0.11633645684463859,
+              "graph_shared_neighbors": 0.09859128096019518,
+              "graph_cand_degree": 0.045499094868201286,
+              "graph_propagation_conf": 0.22630661653389209,
+              "text_name_similarity": 0.07092591075621314,
+              "text_content_similarity": 0.18800693937606272
+            },
+            "offset": 0.26893271430465765,
+            "fitness": 0.7544276815505105,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          },
+          {
+            "fold": 2,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.007497150048248704,
+              "hist_cochange_count": 0.06127790477116601,
+              "hist_cochange_recency": 0.08543428002515652,
+              "hist_cand_recent_changes": 0.015167731008705854,
+              "hist_file_cochange_conf": 0.05173788762297834,
+              "hist_type_cochange_conf": 0.09092281063521075,
+              "graph_proximity": 0.02668244711086574,
+              "graph_shared_neighbors": 0.06198836376068628,
+              "graph_cand_degree": 0.017946275946590647,
+              "graph_propagation_conf": 0.3647327230283847,
+              "text_name_similarity": 0.00563500704745995,
+              "text_content_similarity": 0.21097741899454628
+            },
+            "offset": 0.218941482460907,
+            "fitness": 0.734327517858123,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          },
+          {
+            "fold": 2,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.024697295539056734,
+              "hist_cochange_count": 0.023357115890118872,
+              "hist_cochange_recency": 0.03123085488999951,
+              "hist_cand_recent_changes": 0.02190783898864933,
+              "hist_file_cochange_conf": 0.009267988150573803,
+              "hist_type_cochange_conf": 0.15380247778263695,
+              "graph_proximity": 0.09197709838025053,
+              "graph_shared_neighbors": 0.0320489532209292,
+              "graph_cand_degree": 0.07492990587474893,
+              "graph_propagation_conf": 0.2865746956550341,
+              "text_name_similarity": 0.002804323818241049,
+              "text_content_similarity": 0.24740145180976095
+            },
+            "offset": 0.2566285524734364,
+            "fitness": 0.7337770262506567,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.8"
+      },
+      "ga_lc25": {
+        "config": "p30g120_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 2,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.045379661200841116,
+              "hist_cochange_count": 0.004070441242321292,
+              "hist_cochange_recency": 0.098676559568827,
+              "hist_cand_recent_changes": 0.015456871694441264,
+              "hist_file_cochange_conf": 0.001157143385752337,
+              "hist_type_cochange_conf": 0.177323259872414,
+              "graph_proximity": 0.013644420179297014,
+              "graph_shared_neighbors": 0.109229263404174,
+              "graph_cand_degree": 0.009555528818585176,
+              "graph_propagation_conf": 0.2844654677304309,
+              "text_name_similarity": 0.01297618763278689,
+              "text_content_similarity": 0.2280651952701291
+            },
+            "offset": 0.25758020267347,
+            "fitness": 0.7754021795883638,
+            "evaluations": 3630,
+            "n_train_repos": 10
+          },
+          {
+            "fold": 2,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.026029154176724568,
+              "hist_cochange_count": 0.00019946744482261168,
+              "hist_cochange_recency": 0.0348945917142267,
+              "hist_cand_recent_changes": 0.03915183402219116,
+              "hist_file_cochange_conf": 0.06714851491711579,
+              "hist_type_cochange_conf": 0.15973782164281455,
+              "graph_proximity": 0.04865595552772427,
+              "graph_shared_neighbors": 0.03328020561449855,
+              "graph_cand_degree": 0.04815613110421827,
+              "graph_propagation_conf": 0.3733996360568322,
+              "text_name_similarity": 0.05136192982245176,
+              "text_content_similarity": 0.11798475795637946
+            },
+            "offset": 0.19424888944953442,
+            "fitness": 0.7643974555503001,
+            "evaluations": 3630,
+            "n_train_repos": 10
+          },
+          {
+            "fold": 2,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.0,
+              "hist_cochange_count": 4.791782269261409e-05,
+              "hist_cochange_recency": 0.06439894672031787,
+              "hist_cand_recent_changes": 0.08326777749732878,
+              "hist_file_cochange_conf": 0.0318035486091675,
+              "hist_type_cochange_conf": 0.22176972035404127,
+              "graph_proximity": 0.12807185545869104,
+              "graph_shared_neighbors": 0.07337268749343971,
+              "graph_cand_degree": 0.0091293705254527,
+              "graph_propagation_conf": 0.11262563810146553,
+              "text_name_similarity": 0.004744282241185674,
+              "text_content_similarity": 0.2707682551762172
+            },
+            "offset": 0.2858113090995804,
+            "fitness": 0.7335177128108573,
+            "evaluations": 3630,
+            "n_train_repos": 10
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.8"
+      },
+      "ga_lc50": {
+        "config": "p30g120_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 2,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.017425712502845633,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.11194257919908698,
+              "hist_cand_recent_changes": 0.007674562153472104,
+              "hist_file_cochange_conf": 0.013569360352720912,
+              "hist_type_cochange_conf": 0.14156652749233176,
+              "graph_proximity": 0.03854174443976297,
+              "graph_shared_neighbors": 0.08519606070961586,
+              "graph_cand_degree": 0.032123667835297326,
+              "graph_propagation_conf": 0.36562060786179434,
+              "text_name_similarity": 0.01407071085053515,
+              "text_content_similarity": 0.17226846660253708
+            },
+            "offset": 0.19805328414336168,
+            "fitness": 0.7588822835252754,
+            "evaluations": 3630,
+            "n_train_repos": 21
+          },
+          {
+            "fold": 2,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.04183607971413019,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.04877959226091177,
+              "hist_cand_recent_changes": 0.030133970287815275,
+              "hist_file_cochange_conf": 0.023115626748626897,
+              "hist_type_cochange_conf": 0.1725163791069886,
+              "graph_proximity": 0.03151514247070095,
+              "graph_shared_neighbors": 0.07965887198807953,
+              "graph_cand_degree": 0.03996890658014429,
+              "graph_propagation_conf": 0.3768362299331632,
+              "text_name_similarity": 0.0437266833653709,
+              "text_content_similarity": 0.11191251754406846
+            },
+            "offset": 0.1829802773842672,
+            "fitness": 0.7410658543694235,
+            "evaluations": 3630,
+            "n_train_repos": 21
+          },
+          {
+            "fold": 2,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.014214614485258945,
+              "hist_cochange_count": 0.044112257052887086,
+              "hist_cochange_recency": 0.054463950979621735,
+              "hist_cand_recent_changes": 0.022883709212562504,
+              "hist_file_cochange_conf": 0.009056128355396806,
+              "hist_type_cochange_conf": 0.17507876315966442,
+              "graph_proximity": 0.0363652065367481,
+              "graph_shared_neighbors": 0.07923569708016255,
+              "graph_cand_degree": 0.025832126272085577,
+              "graph_propagation_conf": 0.3201989851330118,
+              "text_name_similarity": 0.005862449742069523,
+              "text_content_similarity": 0.21269611199053096
+            },
+            "offset": 0.22526377635174138,
+            "fitness": 0.7553301331772808,
+            "evaluations": 3630,
+            "n_train_repos": 21
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.8"
+      },
+      "ga_lc75": {
+        "config": "p30g120_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 2,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.001030452271727748,
+              "hist_cochange_count": 0.0031152016768235214,
+              "hist_cochange_recency": 0.08377679981367926,
+              "hist_cand_recent_changes": 0.03216630629070763,
+              "hist_file_cochange_conf": 0.015926823208683986,
+              "hist_type_cochange_conf": 0.17617822289911386,
+              "graph_proximity": 0.014897787016604309,
+              "graph_shared_neighbors": 0.09201357436463953,
+              "graph_cand_degree": 0.011764186454322556,
+              "graph_propagation_conf": 0.365510073967395,
+              "text_name_similarity": 0.012616224820499147,
+              "text_content_similarity": 0.19100434721580348
+            },
+            "offset": 0.20692733044334286,
+            "fitness": 0.7593090617253745,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          },
+          {
+            "fold": 2,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.0012492826044216586,
+              "hist_cochange_count": 0.019603084562088324,
+              "hist_cochange_recency": 0.052025385635724564,
+              "hist_cand_recent_changes": 0.01860642629424446,
+              "hist_file_cochange_conf": 0.060104182749603635,
+              "hist_type_cochange_conf": 0.18015237870401213,
+              "graph_proximity": 0.07687206783963008,
+              "graph_shared_neighbors": 0.07435686046282546,
+              "graph_cand_degree": 0.018251162217900248,
+              "graph_propagation_conf": 0.27798012984883674,
+              "text_name_similarity": 0.003963009374549285,
+              "text_content_similarity": 0.2168360297061634
+            },
+            "offset": 0.23908052636144084,
+            "fitness": 0.7372572218354235,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          },
+          {
+            "fold": 2,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.0,
+              "hist_cochange_count": 0.05828231786684005,
+              "hist_cochange_recency": 0.023605254900567377,
+              "hist_cand_recent_changes": 0.01658278592624903,
+              "hist_file_cochange_conf": 0.05297610333845292,
+              "hist_type_cochange_conf": 0.2306438828259095,
+              "graph_proximity": 0.07241228311481258,
+              "graph_shared_neighbors": 0.056999559483167914,
+              "graph_cand_degree": 0.0051360206793782505,
+              "graph_propagation_conf": 0.24618182968646787,
+              "text_name_similarity": 0.030738913250635883,
+              "text_content_similarity": 0.20644104892751863
+            },
+            "offset": 0.25146623086082237,
+            "fitness": 0.7451697825931689,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.8"
+      },
+      "ga": {
+        "config": "p30g120_m0.1_c0.8",
+        "runs": [
+          {
+            "fold": 2,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.008773673561713477,
+              "hist_cochange_count": 0.08666182213546833,
+              "hist_cochange_recency": 0.0015789442615370757,
+              "hist_cand_recent_changes": 0.0027952129642230426,
+              "hist_file_cochange_conf": 0.03914399184546174,
+              "hist_type_cochange_conf": 0.19339202687433157,
+              "graph_proximity": 0.0695175678871951,
+              "graph_shared_neighbors": 0.04691939556804113,
+              "graph_cand_degree": 0.010072836906054773,
+              "graph_propagation_conf": 0.3403086834127802,
+              "text_name_similarity": 0.03640059825594392,
+              "text_content_similarity": 0.16443524632724976
+            },
+            "offset": 0.21249175131348094,
+            "fitness": 0.7570378588691418,
+            "evaluations": 3630
+          },
+          {
+            "fold": 2,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.012695137646998896,
+              "hist_cochange_count": 0.01536718889154152,
+              "hist_cochange_recency": 0.06999601029087617,
+              "hist_cand_recent_changes": 0.026493490991440306,
+              "hist_file_cochange_conf": 0.022142089127040552,
+              "hist_type_cochange_conf": 0.23392471824002484,
+              "graph_proximity": 0.009086094743056983,
+              "graph_shared_neighbors": 0.06956341178899264,
+              "graph_cand_degree": 0.03235388000881947,
+              "graph_propagation_conf": 0.29079683319884586,
+              "text_name_similarity": 0.0059087889590791615,
+              "text_content_similarity": 0.21167235611328358
+            },
+            "offset": 0.23737055872345827,
+            "fitness": 0.7533626173365463,
+            "evaluations": 3630
+          },
+          {
+            "fold": 2,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.0146357125454154,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.055682544982793486,
+              "hist_cand_recent_changes": 0.00015980332192222187,
+              "hist_file_cochange_conf": 0.061831712586644466,
+              "hist_type_cochange_conf": 0.3264201183647962,
+              "graph_proximity": 0.06574884162321601,
+              "graph_shared_neighbors": 0.061278617574085315,
+              "graph_cand_degree": 0.0007579020432049677,
+              "graph_propagation_conf": 0.22442467875431277,
+              "text_name_similarity": 0.007481458206780159,
+              "text_content_similarity": 0.18157860999682918
+            },
+            "offset": 0.21543781980285964,
+            "fitness": 0.7484344456281129,
+            "evaluations": 3630
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.8"
+      }
+    },
+    "3": {
+      "ga_lc10": {
+        "config": "p30g120_m0.3_c0.95",
+        "runs": [
+          {
+            "fold": 3,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.0,
+              "hist_cochange_count": 0.029975214167512417,
+              "hist_cochange_recency": 0.06341001014411161,
+              "hist_cand_recent_changes": 0.05124063465814679,
+              "hist_file_cochange_conf": 0.06511583949826916,
+              "hist_type_cochange_conf": 0.24060279004418117,
+              "graph_proximity": 0.0032617779781615166,
+              "graph_shared_neighbors": 0.07328906905567623,
+              "graph_cand_degree": 0.0031273250960598487,
+              "graph_propagation_conf": 0.22917903631478495,
+              "text_name_similarity": 0.008700446240032224,
+              "text_content_similarity": 0.23209785680306408
+            },
+            "offset": 0.20263313872391667,
+            "fitness": 0.7378088217739872,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          },
+          {
+            "fold": 3,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.013424313487701673,
+              "hist_cochange_count": 0.055106521037023334,
+              "hist_cochange_recency": 0.029417734889274804,
+              "hist_cand_recent_changes": 0.04304964905417554,
+              "hist_file_cochange_conf": 0.017153478723220084,
+              "hist_type_cochange_conf": 0.12049786306977267,
+              "graph_proximity": 0.004850029446664639,
+              "graph_shared_neighbors": 0.11564312677743786,
+              "graph_cand_degree": 0.04514595880987603,
+              "graph_propagation_conf": 0.33831619358260145,
+              "text_name_similarity": 0.03600059041497785,
+              "text_content_similarity": 0.181394540707274
+            },
+            "offset": 0.23049051481734145,
+            "fitness": 0.7347634584054031,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          },
+          {
+            "fold": 3,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.0006905066474188874,
+              "hist_cochange_count": 0.03936321907564009,
+              "hist_cochange_recency": 0.0,
+              "hist_cand_recent_changes": 0.03713941956424116,
+              "hist_file_cochange_conf": 0.07037091739578641,
+              "hist_type_cochange_conf": 0.26059149910074275,
+              "graph_proximity": 0.013941428637058806,
+              "graph_shared_neighbors": 0.06985308481924508,
+              "graph_cand_degree": 0.031531851821842115,
+              "graph_propagation_conf": 0.29729829586679307,
+              "text_name_similarity": 0.0056946075376428425,
+              "text_content_similarity": 0.1735251695335888
+            },
+            "offset": 0.22437151092770083,
+            "fitness": 0.6535494190362188,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          }
+        ],
+        "chosen": "p30g120_m0.3_c0.95"
+      },
+      "ga_lc25": {
+        "config": "p30g120_m0.3_c0.95",
+        "runs": [
+          {
+            "fold": 3,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.06462011105058306,
+              "hist_cochange_count": 0.05919101935060829,
+              "hist_cochange_recency": 0.0,
+              "hist_cand_recent_changes": 0.029421417342636074,
+              "hist_file_cochange_conf": 0.01625895156093146,
+              "hist_type_cochange_conf": 0.1423058159963711,
+              "graph_proximity": 0.03438089530565682,
+              "graph_shared_neighbors": 0.07464674863673872,
+              "graph_cand_degree": 0.031663891726906195,
+              "graph_propagation_conf": 0.31992802358903344,
+              "text_name_similarity": 0.04497325880348939,
+              "text_content_similarity": 0.18260986663704548
+            },
+            "offset": 0.214832824902626,
+            "fitness": 0.7240123335156645,
+            "evaluations": 3630,
+            "n_train_repos": 10
+          },
+          {
+            "fold": 3,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.053580524151069724,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.03496565003160827,
+              "hist_cand_recent_changes": 0.05224882242779295,
+              "hist_file_cochange_conf": 0.08824759885264125,
+              "hist_type_cochange_conf": 0.23652054074283066,
+              "graph_proximity": 0.1040026516194805,
+              "graph_shared_neighbors": 0.040793527162312285,
+              "graph_cand_degree": 0.023346891571725117,
+              "graph_propagation_conf": 0.16414550596167213,
+              "text_name_similarity": 0.026340832283418058,
+              "text_content_similarity": 0.17580745519544907
+            },
+            "offset": 0.24853970323147911,
+            "fitness": 0.7493495481708345,
+            "evaluations": 3630,
+            "n_train_repos": 10
+          },
+          {
+            "fold": 3,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.06904768667561184,
+              "hist_cochange_count": 0.0074996441455849735,
+              "hist_cochange_recency": 0.0,
+              "hist_cand_recent_changes": 0.040629251250295866,
+              "hist_file_cochange_conf": 0.08570475608792268,
+              "hist_type_cochange_conf": 0.29803066943505035,
+              "graph_proximity": 0.01704538569725671,
+              "graph_shared_neighbors": 0.07842162493733736,
+              "graph_cand_degree": 0.036387288815988114,
+              "graph_propagation_conf": 0.19272935152329682,
+              "text_name_similarity": 0.0018810160010231686,
+              "text_content_similarity": 0.17262332543063222
+            },
+            "offset": 0.2137154281793137,
+            "fitness": 0.7061479741017465,
+            "evaluations": 3630,
+            "n_train_repos": 10
+          }
+        ],
+        "chosen": "p30g120_m0.3_c0.95"
+      },
+      "ga_lc50": {
+        "config": "p30g120_m0.3_c0.95",
+        "runs": [
+          {
+            "fold": 3,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.0,
+              "hist_cochange_count": 0.015065446412996107,
+              "hist_cochange_recency": 0.09743059469614102,
+              "hist_cand_recent_changes": 0.009666536970189833,
+              "hist_file_cochange_conf": 0.0314108118680043,
+              "hist_type_cochange_conf": 0.20437849714573675,
+              "graph_proximity": 0.03483577910538589,
+              "graph_shared_neighbors": 0.07296161368953961,
+              "graph_cand_degree": 0.0057378188284866955,
+              "graph_propagation_conf": 0.3362139183201622,
+              "text_name_similarity": 0.008453477814937481,
+              "text_content_similarity": 0.18384550514842019
+            },
+            "offset": 0.2070676836444719,
+            "fitness": 0.7534081346090753,
+            "evaluations": 3630,
+            "n_train_repos": 21
+          },
+          {
+            "fold": 3,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.014194190288238649,
+              "hist_cochange_count": 0.021473325441103214,
+              "hist_cochange_recency": 0.08851646693724888,
+              "hist_cand_recent_changes": 0.006659625932322067,
+              "hist_file_cochange_conf": 0.026441217513883567,
+              "hist_type_cochange_conf": 0.13553994001151018,
+              "graph_proximity": 0.0,
+              "graph_shared_neighbors": 0.10584903968256962,
+              "graph_cand_degree": 0.021059416372120197,
+              "graph_propagation_conf": 0.3689688298808069,
+              "text_name_similarity": 0.01508760328699339,
+              "text_content_similarity": 0.19621034465320344
+            },
+            "offset": 0.2219007950745463,
+            "fitness": 0.7404854618079896,
+            "evaluations": 3630,
+            "n_train_repos": 21
+          },
+          {
+            "fold": 3,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.0,
+              "hist_cochange_count": 0.013421342555463027,
+              "hist_cochange_recency": 0.05506726413122464,
+              "hist_cand_recent_changes": 0.030626076572052338,
+              "hist_file_cochange_conf": 0.07961582966933073,
+              "hist_type_cochange_conf": 0.2330945159596632,
+              "graph_proximity": 0.006938182314818615,
+              "graph_shared_neighbors": 0.06629505454144044,
+              "graph_cand_degree": 0.02590329503965324,
+              "graph_propagation_conf": 0.2982969005181651,
+              "text_name_similarity": 0.0023650258271415703,
+              "text_content_similarity": 0.18837651287104723
+            },
+            "offset": 0.21797430967933665,
+            "fitness": 0.7394524994032374,
+            "evaluations": 3630,
+            "n_train_repos": 21
+          }
+        ],
+        "chosen": "p30g120_m0.3_c0.95"
+      },
+      "ga_lc75": {
+        "config": "p30g120_m0.3_c0.95",
+        "runs": [
+          {
+            "fold": 3,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.006492077335074401,
+              "hist_cochange_count": 0.0035701631744248807,
+              "hist_cochange_recency": 0.0731974996641157,
+              "hist_cand_recent_changes": 0.011499347356449837,
+              "hist_file_cochange_conf": 0.08397829741746002,
+              "hist_type_cochange_conf": 0.20465674361231817,
+              "graph_proximity": 0.033295608987145335,
+              "graph_shared_neighbors": 0.07922026673068737,
+              "graph_cand_degree": 0.0790712654708487,
+              "graph_propagation_conf": 0.21878493021893877,
+              "text_name_similarity": 0.022154635472846466,
+              "text_content_similarity": 0.18407916455969028
+            },
+            "offset": 0.2219078595810852,
+            "fitness": 0.7461289761164875,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          },
+          {
+            "fold": 3,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.02901527724274378,
+              "hist_cochange_count": 0.0010883079243591896,
+              "hist_cochange_recency": 0.0744143218318524,
+              "hist_cand_recent_changes": 0.013997885482526826,
+              "hist_file_cochange_conf": 0.06261950839250752,
+              "hist_type_cochange_conf": 0.19411225459116027,
+              "graph_proximity": 0.008208426414904452,
+              "graph_shared_neighbors": 0.06474797983774341,
+              "graph_cand_degree": 0.04199541472404564,
+              "graph_propagation_conf": 0.3209682906179955,
+              "text_name_similarity": 0.018268565225925775,
+              "text_content_similarity": 0.17056376771423526
+            },
+            "offset": 0.2020880007274029,
+            "fitness": 0.7583915046681612,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          },
+          {
+            "fold": 3,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.056586479371538094,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.04850124859200681,
+              "hist_cand_recent_changes": 0.008068971528963093,
+              "hist_file_cochange_conf": 0.06730442418852839,
+              "hist_type_cochange_conf": 0.1858698195597291,
+              "graph_proximity": 0.02541582609254251,
+              "graph_shared_neighbors": 0.06110682620976141,
+              "graph_cand_degree": 0.050138693637554355,
+              "graph_propagation_conf": 0.32706940471100865,
+              "text_name_similarity": 0.00850065789251589,
+              "text_content_similarity": 0.16143764821585183
+            },
+            "offset": 0.18374901534670393,
+            "fitness": 0.7471814993872345,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          }
+        ],
+        "chosen": "p30g120_m0.3_c0.95"
+      },
+      "ga": {
+        "config": "p30g120_m0.3_c0.95",
+        "runs": [
+          {
+            "fold": 3,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.07612365484540258,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.0343858976325518,
+              "hist_cand_recent_changes": 0.00787244256775101,
+              "hist_file_cochange_conf": 0.06199914195645555,
+              "hist_type_cochange_conf": 0.23519492585847185,
+              "graph_proximity": 0.05197018362848305,
+              "graph_shared_neighbors": 0.06516993994977298,
+              "graph_cand_degree": 0.050739785949054,
+              "graph_propagation_conf": 0.2149167321216616,
+              "text_name_similarity": 0.011288244822084518,
+              "text_content_similarity": 0.19033905066831103
+            },
+            "offset": 0.23487924122058446,
+            "fitness": 0.7481542323895263,
+            "evaluations": 3630
+          },
+          {
+            "fold": 3,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.00424766169081406,
+              "hist_cochange_count": 0.00024877292915386287,
+              "hist_cochange_recency": 0.08471642458631233,
+              "hist_cand_recent_changes": 0.01551008060201344,
+              "hist_file_cochange_conf": 0.07043280533294095,
+              "hist_type_cochange_conf": 0.19848793599358794,
+              "graph_proximity": 0.01807852125191554,
+              "graph_shared_neighbors": 0.07206367088757192,
+              "graph_cand_degree": 0.011901761922737413,
+              "graph_propagation_conf": 0.32085365687869455,
+              "text_name_similarity": 0.0027785791838047186,
+              "text_content_similarity": 0.20068012874045332
+            },
+            "offset": 0.215670300578339,
+            "fitness": 0.7475252197370881,
+            "evaluations": 3630
+          },
+          {
+            "fold": 3,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.02502772727791918,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.04820462778343083,
+              "hist_cand_recent_changes": 0.03638472168161853,
+              "hist_file_cochange_conf": 0.061781429560075526,
+              "hist_type_cochange_conf": 0.20092122198451576,
+              "graph_proximity": 0.0375357699529709,
+              "graph_shared_neighbors": 0.0680995800711088,
+              "graph_cand_degree": 0.05401414364854291,
+              "graph_propagation_conf": 0.30599734371732046,
+              "text_name_similarity": 0.0074141997963713055,
+              "text_content_similarity": 0.15461923452612583
+            },
+            "offset": 0.1988478093832101,
+            "fitness": 0.7461592404673915,
+            "evaluations": 3630
+          }
+        ],
+        "chosen": "p30g120_m0.3_c0.95"
+      }
+    },
+    "4": {
+      "ga_lc10": {
+        "config": "p30g120_m0.1_c0.95",
+        "runs": [
+          {
+            "fold": 4,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.06725956329148801,
+              "hist_cochange_count": 0.0005129619867324669,
+              "hist_cochange_recency": 0.00012737830859733815,
+              "hist_cand_recent_changes": 0.013299216726617985,
+              "hist_file_cochange_conf": 0.050023970431018555,
+              "hist_type_cochange_conf": 0.20301556961654538,
+              "graph_proximity": 0.10192512671101196,
+              "graph_shared_neighbors": 0.07019796353761627,
+              "graph_cand_degree": 8.947610947752247e-06,
+              "graph_propagation_conf": 0.31425681931946237,
+              "text_name_similarity": 0.049910447528048414,
+              "text_content_similarity": 0.12946203493191347
+            },
+            "offset": 0.2026896012469938,
+            "fitness": 0.7408849749752794,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          },
+          {
+            "fold": 4,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.0,
+              "hist_cochange_count": 0.0135455255567286,
+              "hist_cochange_recency": 0.06080355598858283,
+              "hist_cand_recent_changes": 0.05163453915590548,
+              "hist_file_cochange_conf": 0.003457412797237705,
+              "hist_type_cochange_conf": 0.101706702760257,
+              "graph_proximity": 0.1322109121246623,
+              "graph_shared_neighbors": 0.0704916478292803,
+              "graph_cand_degree": 0.04853920370548844,
+              "graph_propagation_conf": 0.2771817709428952,
+              "text_name_similarity": 0.042559236614210086,
+              "text_content_similarity": 0.1978694925247521
+            },
+            "offset": 0.25236775559375235,
+            "fitness": 0.7393784623112077,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          },
+          {
+            "fold": 4,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.07338271995823104,
+              "hist_cochange_count": 0.009818032136996998,
+              "hist_cochange_recency": 0.0,
+              "hist_cand_recent_changes": 0.0018745979868829967,
+              "hist_file_cochange_conf": 0.008081457685067774,
+              "hist_type_cochange_conf": 0.18376269716722807,
+              "graph_proximity": 0.20114800535561653,
+              "graph_shared_neighbors": 0.0591699489383339,
+              "graph_cand_degree": 0.025389812442655802,
+              "graph_propagation_conf": 0.2065628870672762,
+              "text_name_similarity": 0.08350824573983011,
+              "text_content_similarity": 0.14730159552188052
+            },
+            "offset": 0.26181324081478596,
+            "fitness": 0.7475523003438602,
+            "evaluations": 3630,
+            "n_train_repos": 4
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.95"
+      },
+      "ga_lc25": {
+        "config": "p30g120_m0.1_c0.95",
+        "runs": [
+          {
+            "fold": 4,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.09305686064913925,
+              "hist_cochange_count": 0.008215565418111312,
+              "hist_cochange_recency": 0.02036501672153271,
+              "hist_cand_recent_changes": 0.011142809485516372,
+              "hist_file_cochange_conf": 0.048801362471132946,
+              "hist_type_cochange_conf": 0.1764266074061186,
+              "graph_proximity": 0.07819114285366138,
+              "graph_shared_neighbors": 0.05602857235950045,
+              "graph_cand_degree": 0.01843956508707394,
+              "graph_propagation_conf": 0.3180076291455851,
+              "text_name_similarity": 0.02352591297252239,
+              "text_content_similarity": 0.14779895543010552
+            },
+            "offset": 0.20379991652991974,
+            "fitness": 0.7559129519466258,
+            "evaluations": 3630,
+            "n_train_repos": 10
+          },
+          {
+            "fold": 4,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.0869168216226505,
+              "hist_cochange_count": 0.00014220202116327794,
+              "hist_cochange_recency": 0.040484312346909364,
+              "hist_cand_recent_changes": 0.026027257548549964,
+              "hist_file_cochange_conf": 0.03360571592943568,
+              "hist_type_cochange_conf": 0.12343387014210846,
+              "graph_proximity": 0.03734471294528481,
+              "graph_shared_neighbors": 0.0806488352336883,
+              "graph_cand_degree": 0.011023809693658383,
+              "graph_propagation_conf": 0.32802775746875373,
+              "text_name_similarity": 0.014082446566420475,
+              "text_content_similarity": 0.21826225848137684
+            },
+            "offset": 0.2526850985147932,
+            "fitness": 0.7478968468104508,
+            "evaluations": 3630,
+            "n_train_repos": 10
+          },
+          {
+            "fold": 4,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.0,
+              "hist_cochange_count": 0.016405304198765628,
+              "hist_cochange_recency": 0.05196284533983257,
+              "hist_cand_recent_changes": 0.04356949280957556,
+              "hist_file_cochange_conf": 0.05957641486301541,
+              "hist_type_cochange_conf": 0.17580834910893323,
+              "graph_proximity": 0.06264039585552739,
+              "graph_shared_neighbors": 0.055123347740013075,
+              "graph_cand_degree": 0.06709471509213044,
+              "graph_propagation_conf": 0.2871485719106724,
+              "text_name_similarity": 0.008199606075486624,
+              "text_content_similarity": 0.1724709570060477
+            },
+            "offset": 0.2156612384111234,
+            "fitness": 0.7588563527996867,
+            "evaluations": 3630,
+            "n_train_repos": 10
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.95"
+      },
+      "ga_lc50": {
+        "config": "p30g120_m0.1_c0.95",
+        "runs": [
+          {
+            "fold": 4,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.045023685403245056,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.05308146561538727,
+              "hist_cand_recent_changes": 0.001341967449370789,
+              "hist_file_cochange_conf": 0.048053215585914584,
+              "hist_type_cochange_conf": 0.20952851058066407,
+              "graph_proximity": 0.0749911176727922,
+              "graph_shared_neighbors": 0.03519142130156442,
+              "graph_cand_degree": 0.029857864408077753,
+              "graph_propagation_conf": 0.30332594056344236,
+              "text_name_similarity": 0.021684808853158752,
+              "text_content_similarity": 0.1779200025663828
+            },
+            "offset": 0.2087519023103251,
+            "fitness": 0.7388613744123764,
+            "evaluations": 3630,
+            "n_train_repos": 21
+          },
+          {
+            "fold": 4,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.0628200973996354,
+              "hist_cochange_count": 0.00012201740416904697,
+              "hist_cochange_recency": 0.03974121655215757,
+              "hist_cand_recent_changes": 0.01786206541647707,
+              "hist_file_cochange_conf": 0.052646508006418694,
+              "hist_type_cochange_conf": 0.18387236087767522,
+              "graph_proximity": 0.00875177910591328,
+              "graph_shared_neighbors": 0.056343623405239684,
+              "graph_cand_degree": 0.03081827676790607,
+              "graph_propagation_conf": 0.3778607311855297,
+              "text_name_similarity": 0.002607746509433684,
+              "text_content_similarity": 0.16655357736944448
+            },
+            "offset": 0.19435395109071232,
+            "fitness": 0.7658372988283824,
+            "evaluations": 3630,
+            "n_train_repos": 21
+          },
+          {
+            "fold": 4,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.0,
+              "hist_cochange_count": 0.05452354018081286,
+              "hist_cochange_recency": 0.03657367063563629,
+              "hist_cand_recent_changes": 0.03854411184998309,
+              "hist_file_cochange_conf": 0.004112784431564683,
+              "hist_type_cochange_conf": 0.16310994350151325,
+              "graph_proximity": 0.07977804153328501,
+              "graph_shared_neighbors": 0.08978134641492494,
+              "graph_cand_degree": 0.028448384732278068,
+              "graph_propagation_conf": 0.31294869773973605,
+              "text_name_similarity": 0.012441377913551833,
+              "text_content_similarity": 0.17973810106671376
+            },
+            "offset": 0.22088968370802783,
+            "fitness": 0.7602402850790653,
+            "evaluations": 3630,
+            "n_train_repos": 21
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.95"
+      },
+      "ga_lc75": {
+        "config": "p30g120_m0.1_c0.95",
+        "runs": [
+          {
+            "fold": 4,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.07728105486998989,
+              "hist_cochange_count": 0.007662046841673118,
+              "hist_cochange_recency": 0.010343563931507172,
+              "hist_cand_recent_changes": 0.03816339333552731,
+              "hist_file_cochange_conf": 0.023256252863254768,
+              "hist_type_cochange_conf": 0.1887545184475711,
+              "graph_proximity": 0.025815560923973618,
+              "graph_shared_neighbors": 0.05877340698704802,
+              "graph_cand_degree": 0.01253827597434908,
+              "graph_propagation_conf": 0.38178112502956446,
+              "text_name_similarity": 0.011192637491524125,
+              "text_content_similarity": 0.16443816330401742
+            },
+            "offset": 0.200349114751467,
+            "fitness": 0.7449079203320713,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          },
+          {
+            "fold": 4,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.0,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.09758464110687215,
+              "hist_cand_recent_changes": 0.025513663570384922,
+              "hist_file_cochange_conf": 0.01973550227380493,
+              "hist_type_cochange_conf": 0.20574926472882407,
+              "graph_proximity": 0.09172105243322172,
+              "graph_shared_neighbors": 0.04610436731466227,
+              "graph_cand_degree": 0.02495472616721713,
+              "graph_propagation_conf": 0.3029026283427045,
+              "text_name_similarity": 0.001170093163464412,
+              "text_content_similarity": 0.18456406089884403
+            },
+            "offset": 0.2275762789930444,
+            "fitness": 0.7472510566357999,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          },
+          {
+            "fold": 4,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.03342158280145354,
+              "hist_cochange_count": 0.06855638714642952,
+              "hist_cochange_recency": 0.0,
+              "hist_cand_recent_changes": 0.023514595239268164,
+              "hist_file_cochange_conf": 0.0026303832115066443,
+              "hist_type_cochange_conf": 0.22924370772654135,
+              "graph_proximity": 0.02672792567548463,
+              "graph_shared_neighbors": 0.06998612258097697,
+              "graph_cand_degree": 0.027701168929625417,
+              "graph_propagation_conf": 0.36465892447641957,
+              "text_name_similarity": 0.008002495758246481,
+              "text_content_similarity": 0.1455567064540476
+            },
+            "offset": 0.19148140136478625,
+            "fitness": 0.742200631418355,
+            "evaluations": 3630,
+            "n_train_repos": 32
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.95"
+      },
+      "ga": {
+        "config": "p30g120_m0.1_c0.95",
+        "runs": [
+          {
+            "fold": 4,
+            "seed": 0,
+            "weights": {
+              "hist_cochange_conf": 0.0537563848495609,
+              "hist_cochange_count": 0.0012251024271443284,
+              "hist_cochange_recency": 0.05009794066470217,
+              "hist_cand_recent_changes": 0.029821559951273405,
+              "hist_file_cochange_conf": 0.018223273249363212,
+              "hist_type_cochange_conf": 0.179265459009712,
+              "graph_proximity": 0.07427444858770317,
+              "graph_shared_neighbors": 0.06133280390901208,
+              "graph_cand_degree": 0.04226504176502414,
+              "graph_propagation_conf": 0.30331705091814576,
+              "text_name_similarity": 0.00541668865782662,
+              "text_content_similarity": 0.18100424601053222
+            },
+            "offset": 0.21481893814437067,
+            "fitness": 0.7504277442022065,
+            "evaluations": 3630
+          },
+          {
+            "fold": 4,
+            "seed": 1,
+            "weights": {
+              "hist_cochange_conf": 0.036760144421925364,
+              "hist_cochange_count": 0.0,
+              "hist_cochange_recency": 0.06693806168607438,
+              "hist_cand_recent_changes": 0.02730042920648199,
+              "hist_file_cochange_conf": 0.0073741776811275025,
+              "hist_type_cochange_conf": 0.20933107258985578,
+              "graph_proximity": 0.029467656324303638,
+              "graph_shared_neighbors": 0.06286391688241416,
+              "graph_cand_degree": 0.037204192147848515,
+              "graph_propagation_conf": 0.36830466230515313,
+              "text_name_similarity": 0.012283934443941857,
+              "text_content_similarity": 0.14217175231087384
+            },
+            "offset": 0.1820771222731354,
+            "fitness": 0.7431327472049677,
+            "evaluations": 3630
+          },
+          {
+            "fold": 4,
+            "seed": 2,
+            "weights": {
+              "hist_cochange_conf": 0.07970647367508217,
+              "hist_cochange_count": 0.017461051071398948,
+              "hist_cochange_recency": 0.03012424795039293,
+              "hist_cand_recent_changes": 0.024088642215205226,
+              "hist_file_cochange_conf": 0.0323282585566755,
+              "hist_type_cochange_conf": 0.1933924784468173,
+              "graph_proximity": 0.06430707679362477,
+              "graph_shared_neighbors": 0.07386559771616828,
+              "graph_cand_degree": 0.03086413067703964,
+              "graph_propagation_conf": 0.27034707994867924,
+              "text_name_similarity": 0.002892780187893448,
+              "text_content_similarity": 0.18062218276102252
+            },
+            "offset": 0.21935193093704933,
+            "fitness": 0.7477522757703446,
+            "evaluations": 3630
+          }
+        ],
+        "chosen": "p30g120_m0.1_c0.95"
+      }
+    }
+  },
+  "features": [
+    "hist_cochange_conf",
+    "hist_cochange_count",
+    "hist_cochange_recency",
+    "hist_cand_recent_changes",
+    "hist_file_cochange_conf",
+    "hist_type_cochange_conf",
+    "graph_proximity",
+    "graph_shared_neighbors",
+    "graph_cand_degree",
+    "graph_propagation_conf",
+    "text_name_similarity",
+    "text_content_similarity"
+  ],
+  "config": {
+    "seed": 42,
+    "paths": {
+      "terrads_db": "data/external/terrads/TerraDS.sqlite",
+      "repos_csv": "data/raw/repos.csv",
+      "shortlist_csv": "data/raw/shortlist.csv",
+      "dataset_csv": "data/raw/dataset.csv",
+      "tmp": "data/tmp",
+      "processed": "data/processed",
+      "outputs": "data/results",
+      "logs": "data/logs",
+      "models": "models",
+      "results": "results"
+    },
+    "selection": {
+      "provider": "aws",
+      "min_resources": 20,
+      "min_stars": 0,
+      "shortlist": 150,
+      "min_tf_commits": 50,
+      "min_usable_commits": 50,
+      "max_add_only_frac": 0.4,
+      "dedup_forks": true,
+      "workers": 6,
+      "exclude_keywords": [],
+      "exclude_repos": []
+    },
+    "clone": {
+      "mode": "blobless_prefetch",
+      "timeout_s": 600,
+      "prefetch_chunk": 2000
+    },
+    "mining": {
+      "max_commits": 2000,
+      "min_items": 2,
+      "max_items": 30,
+      "warmup_frac": 0.2,
+      "use_merge_commits": true
+    },
+    "features": {
+      "max_candidates": 200,
+      "prefilter_max_dist": 4,
+      "graph_max_dist": 4,
+      "recency_tau": 100,
+      "churn_window": 200
+    },
+    "model": {
+      "features": [
+        "hist_cochange_conf",
+        "hist_cochange_count",
+        "hist_cochange_recency",
+        "hist_cand_recent_changes",
+        "hist_file_cochange_conf",
+        "hist_type_cochange_conf",
+        "graph_proximity",
+        "graph_shared_neighbors",
+        "graph_cand_degree",
+        "graph_propagation_conf",
+        "text_name_similarity",
+        "text_content_similarity"
+      ]
+    },
+    "baselines": {
+      "arm": {
+        "min_support": 1,
+        "min_confidence": 0.1,
+        "top_k": 10
+      }
+    },
+    "ga": {
+      "population": 60,
+      "generations": 60,
+      "tournament": 3,
+      "crossover_rate": 0.8,
+      "blend_alpha": 0.5,
+      "mutation_rate": 0.3,
+      "sigma_start": 0.2,
+      "sigma_end": 0.02,
+      "elitism": 2,
+      "fitness_sample": 5000,
+      "offset_range": 1.0,
+      "check_seeds": 1,
+      "convergence_generations": 200,
+      "convergence_seeds": 3,
+      "convergence_tol": 0.001,
+      "valid_frac": 0.25,
+      "tune": true,
+      "grid": {
+        "pop_gen": [
+          [
+            30,
+            120
+          ],
+          [
+            60,
+            60
+          ],
+          [
+            120,
+            30
+          ]
+        ],
+        "mutation_rate": [
+          0.1,
+          0.3,
+          0.5
+        ],
+        "crossover_rate": [
+          0.6,
+          0.8,
+          0.95
+        ],
+        "seeds": 3
+      }
+    },
+    "evaluation": {
+      "k": [
+        1,
+        3,
+        5,
+        10
+      ],
+      "folds": 5,
+      "seeds": 10,
+      "bootstrap": 1000,
+      "methods": [
+        "ga",
+        "random_search",
+        "arm",
+        "fixed_weights",
+        "random"
+      ]
+    },
+    "experiments": {
+      "seeds": 3,
+      "ablation": [
+        "hist",
+        "graph",
+        "text"
+      ],
+      "learning_curve": [
+        0.1,
+        0.25,
+        0.5,
+        0.75
+      ]
+    },
+    "output": {
+      "csv": true,
+      "csv_features": false
+    },
+    "recommend": {
+      "top": 10,
+      "combine": "max",
+      "explain_top": 3
+    }
+  },
+  "code_version": "ac3ee2a-dirty"
+}

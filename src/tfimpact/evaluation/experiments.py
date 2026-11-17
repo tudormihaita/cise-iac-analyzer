@@ -62,7 +62,10 @@ def run_evaluation(
     methods: list[str],
     factory: Callable[[str, Config], Method] = make_method,
     progress: Callable[[str], None] | None = None,
+    reference: str | None = None,
 ) -> EvalResult:
+    """`reference`: compare every method only with this one in the paired statistics
+    (default: all pairs)."""
     ev = cfg.evaluation
     ks = list(ev.k)
     repos = dataset_repos(cfg)
@@ -132,7 +135,7 @@ def run_evaluation(
         summary=_summary(per_repo, cols, ev.bootstrap, cfg.seed, _sd_runs(core_pq, cols)),
         breakdowns=_breakdowns(core_pq, cols),
         file_level=_file_level(pd.concat(file_rows, ignore_index=True), cols),
-        stats=_stats(per_repo[per_repo.subset == CORE], methods),
+        stats=_stats(per_repo[per_repo.subset == CORE], methods, reference),
         meta=meta,
     )
 
@@ -228,8 +231,16 @@ def _file_level(fl: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
     return out.reset_index()
 
 
-def _stats(per_repo: pd.DataFrame, methods: list[str]) -> pd.DataFrame:
-    """Pairwise per-repo comparisons; Holm correction within each (target, metric) family."""
+def _stats(
+    per_repo: pd.DataFrame, methods: list[str], reference: str | None = None
+) -> pd.DataFrame:
+    """Pairwise per-repo comparisons (all pairs, or `reference` vs each other method); Holm
+    correction within each (target, metric) family. `ri` = relative improvement of A over B,
+    (mean A − mean B) / mean B."""
+    if reference is None:
+        pairs = list(itertools.combinations(methods, 2))
+    else:
+        pairs = [(reference, m) for m in methods if m != reference]
     rows = []
     for t in TARGETS:
         for metric in STAT_METRICS:
@@ -237,7 +248,7 @@ def _stats(per_repo: pd.DataFrame, methods: list[str]) -> pd.DataFrame:
                 index="repo", columns="method", values=metric
             )
             fam = []
-            for a, b in itertools.combinations(methods, 2):
+            for a, b in pairs:
                 x, y = wide[a].to_numpy(), wide[b].to_numpy()
                 v = S.a12(x, y)
                 fam.append(
@@ -249,6 +260,7 @@ def _stats(per_repo: pd.DataFrame, methods: list[str]) -> pd.DataFrame:
                         "mean_a": float(np.mean(x)),
                         "mean_b": float(np.mean(y)),
                         "diff": float(np.mean(x - y)),
+                        "ri": float(np.mean(x) / np.mean(y) - 1) if np.mean(y) else np.nan,
                         "repos_a_better": int((x > y).sum()),
                         "repos_b_better": int((x < y).sum()),
                         "p_wilcoxon": S.wilcoxon_p(x, y),
@@ -319,6 +331,7 @@ def learned_weights(method_params: dict) -> pd.DataFrame:
                         **r["weights"],
                         "offset": r["offset"],
                         "fitness": r["fitness"],
+                        **({"n_train_repos": r["n_train_repos"]} if "n_train_repos" in r else {}),
                     }
                 )
     return pd.DataFrame(rows)
@@ -392,14 +405,14 @@ def summary_markdown(res: EvalResult) -> str:
         lines += [
             "## Paired comparisons (core repos, per-repo MRR, all targets)",
             "",
-            "| A vs B | mean A | mean B | A better / B better | p (Holm) | A12 |",
-            "|---|---|---|---|---|---|",
+            "| A vs B | mean A | mean B | RI of A | A better / B better | p (Holm) | A12 |",
+            "|---|---|---|---|---|---|---|",
         ]
         st = res.stats[(res.stats.target == "all") & (res.stats.metric == "rr")]
         for r in st.itertuples():
             lines.append(
                 f"| {r.method_a} vs {r.method_b} | {r.mean_a:.3f} | {r.mean_b:.3f} | "
-                f"{r.repos_a_better} / {r.repos_b_better} | {r.p_holm:.2g} | "
+                f"{r.ri:+.1%} | {r.repos_a_better} / {r.repos_b_better} | {r.p_holm:.2g} | "
                 f"{r.a12:.2f} ({r.a12_magnitude}) |"
             )
         lines.append("")
