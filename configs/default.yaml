@@ -7,8 +7,10 @@ paths:
   dataset_csv: data/raw/dataset.csv     # output of `build-dataset`: the repos used downstream
   tmp: data/tmp
   processed: data/processed
-  results: data/results
+  outputs: data/results                 # everything runs write: per-query tables, ga_runs/, full CSVs (gitignored)
   logs: data/logs                       # one timestamped log per select-repos / mine / build-dataset run
+  models: models                        # trained model(s), committed (`tfimpact train`)
+  results: results                      # curated, committed result tables + figures (`tfimpact export`)
 
 selection:                      # every value is justified in docs/THRESHOLDS.md
   provider: aws                 # only place a provider is named
@@ -64,23 +66,36 @@ baselines:
     min_confidence: 0.1
     top_k: 10                   # open: may be raised if 10 proves too small after the dev check
 
-ga:
+ga:                             # settings justified in docs/THRESHOLDS.md
   population: 60
   generations: 60
   tournament: 3
   crossover_rate: 0.8
-  mutation_rate: 0.3
-  sigma_start: 0.2
+  blend_alpha: 0.5              # BLX-alpha crossover range extension
+  mutation_rate: 0.3            # per gene
+  sigma_start: 0.2              # Gaussian mutation sigma, linearly decaying
   sigma_end: 0.02
   elitism: 2
-  fitness_sample: 2000
+  fitness_sample: 5000          # training queries per run, equal number per repo
+  offset_range: 1.0             # add-type offset gene in [-range, range]
+  check_seeds: 1                # runs per fold for the sanity variants (permuted / negative)
+  convergence_generations: 200  # generous budget for the convergence check
+  convergence_seeds: 3
+  convergence_tol: 0.001        # plateau = within this of the final training fitness
+  valid_frac: 0.25              # inner validation share of training repos (convergence, tuning)
+  tune: true                    # `ga` picks its configuration per fold by nested grid search
+  grid:                         # 3 x 3 x 3 configurations, each with `seeds` runs
+    pop_gen: [[30, 120], [60, 60], [120, 30]]   # population x generations, same budget
+    mutation_rate: [0.1, 0.3, 0.5]
+    crossover_rate: [0.6, 0.8, 0.95]
+    seeds: 3
 
 evaluation:
   k: [1, 3, 5, 10]              # 3 matches ROSE (top 3) and GA-IaCRec (Top@3)
   folds: 5                      # grouped by repository, balanced by query count
   seeds: 10                     # GA runs per fold
   bootstrap: 1000               # resamples for the 95% CI of per-repo means
-  methods: [arm, fixed_weights, random]
+  methods: [ga, random_search, arm, fixed_weights, random]
 
 output:
   csv: true

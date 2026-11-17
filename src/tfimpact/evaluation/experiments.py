@@ -27,6 +27,7 @@ import pandas as pd
 
 from tfimpact.config import Config, config_to_dict
 from tfimpact.evaluation import stats as S
+from tfimpact.evaluation.figures import make_figures
 from tfimpact.evaluation.loader import ADD_ONLY, CORE, dataset_repos, load_repo, query_counts
 from tfimpact.evaluation.metrics import (
     bootstrap_ci,
@@ -35,8 +36,9 @@ from tfimpact.evaluation.metrics import (
     metric_columns,
 )
 from tfimpact.evaluation.splits import load_or_make_folds, train_test
+from tfimpact.methods import make_method
 from tfimpact.methods.base import Method
-from tfimpact.methods.baselines import make_baseline, required_features
+from tfimpact.methods.baselines import required_features
 
 TARGETS: dict[str, str | None] = {"all": None, "existing": "existing"}
 SEED_ACTIONS = {"+": "added", "~": "modified", "-": "removed"}
@@ -58,7 +60,7 @@ class EvalResult:
 def run_evaluation(
     cfg: Config,
     methods: list[str],
-    factory: Callable[[str, Config], Method] = make_baseline,
+    factory: Callable[[str, Config], Method] = make_method,
     progress: Callable[[str], None] | None = None,
 ) -> EvalResult:
     ev = cfg.evaluation
@@ -69,7 +71,7 @@ def run_evaluation(
     core = [r for r in repos.slug if subset[r] == CORE]
     held_out = [r for r in repos.slug if subset[r] == ADD_ONLY]
     sizes = query_counts(cfg, core)
-    folds = load_or_make_folds(cfg.paths.results / "folds.csv", sizes, ev.folds, cfg.seed)
+    folds = load_or_make_folds(cfg.paths.outputs / "folds.csv", sizes, ev.folds, cfg.seed)
     names = required_features(cfg, methods)
     cols = metric_columns(ks)
 
@@ -79,9 +81,11 @@ def run_evaluation(
         fitted = {m: factory(m, cfg) for m in methods}
         if any(obj.learns for obj in fitted.values()):
             train_data = [load_repo(cfg, r, names, kinds[r]) for r in train]
-            for obj in fitted.values():
+            for m, obj in fitted.items():
                 if obj.learns:
-                    obj.fit(train_data)
+                    if progress:
+                        progress(f"fold {fold + 1}/{ev.folds}  training {m}")
+                    obj.fit(train_data, fold=fold)
             del train_data
         params[fold] = {m: obj.params() for m, obj in fitted.items()}
         # held-out repos: learned methods in every fold (averaged later), others once
@@ -96,18 +100,18 @@ def run_evaluation(
             q = data.queries
             ceilings[r] = float(q.n_labels_in_candidates.sum() / max(q.n_labels.sum(), 1))
             for m in ms:
-                rk = fitted[m].rank(data)
-                common = dict(
-                    ks=ks, seed=cfg.seed, top_k_cut=rk.top_k, drop_warmup=False,
-                    recommended=rk.recommended,
-                )  # fmt: skip
-                tags = dict(method=m, fold=fold, repo_kind=kinds[r], subset=subset[r])
-                for target, kind in TARGETS.items():
-                    pq = compute_query_metrics(data.features, q, rk.scores, kind=kind, **common)
-                    per_query.append(pq.assign(target=target, **tags))
-                if subset[r] == CORE:
-                    fl = compute_file_level_metrics(data.features, q, rk.scores, **common)
-                    file_rows.append(fl.assign(method=m, fold=fold))
+                for run, rk in enumerate(fitted[m].rank_all(data)):
+                    common = dict(
+                        ks=ks, seed=cfg.seed, top_k_cut=rk.top_k, drop_warmup=False,
+                        recommended=rk.recommended,
+                    )  # fmt: skip
+                    tags = dict(method=m, fold=fold, run=run, repo_kind=kinds[r], subset=subset[r])
+                    for target, kind in TARGETS.items():
+                        pq = compute_query_metrics(data.features, q, rk.scores, kind=kind, **common)
+                        per_query.append(pq.assign(target=target, **tags))
+                    if subset[r] == CORE:
+                        fl = compute_file_level_metrics(data.features, q, rk.scores, **common)
+                        file_rows.append(fl.assign(method=m, fold=fold, run=run))
 
     pq = pd.concat(per_query, ignore_index=True)
     per_repo = _per_repo(pq, cols, ceilings)
@@ -125,7 +129,7 @@ def run_evaluation(
     return EvalResult(
         per_query=pq,
         per_repo=per_repo,
-        summary=_summary(per_repo, cols, ev.bootstrap, cfg.seed),
+        summary=_summary(per_repo, cols, ev.bootstrap, cfg.seed, _sd_runs(core_pq, cols)),
         breakdowns=_breakdowns(core_pq, cols),
         file_level=_file_level(pd.concat(file_rows, ignore_index=True), cols),
         stats=_stats(per_repo[per_repo.subset == CORE], methods),
@@ -149,7 +153,25 @@ def _per_repo(pq: pd.DataFrame, cols: list[str], ceilings: dict[str, float]) -> 
     return out
 
 
-def _summary(per_repo: pd.DataFrame, cols: list[str], n_boot: int, seed: int) -> pd.DataFrame:
+def _sd_runs(pq: pd.DataFrame, cols: list[str]) -> dict[tuple[str, str, str], float]:
+    """SD over runs (GA seeds) of the core mean: per run, mean over repos, then SD."""
+    rep_run = pq.groupby(["method", "target", "run", "repo"])[cols].mean()
+    by_run = rep_run.groupby(["method", "target", "run"]).mean()
+    out = {}
+    for (m, t), g in by_run.groupby(["method", "target"]):
+        for c in cols:
+            out[(m, t, c)] = float(g[c].std(ddof=1)) if len(g) > 1 else float("nan")
+    return out
+
+
+def _summary(
+    per_repo: pd.DataFrame,
+    cols: list[str],
+    n_boot: int,
+    seed: int,
+    sd_runs: dict[tuple[str, str, str], float] | None = None,
+) -> pd.DataFrame:
+    sd_runs = sd_runs or {}
     rows = []
     for (m, t), g_all in per_repo.groupby(["method", "target"], sort=False):
         for sub in SUBSETS:
@@ -168,6 +190,7 @@ def _summary(per_repo: pd.DataFrame, cols: list[str], n_boot: int, seed: int) ->
                         "mean": g[c].mean(),
                         "sd_repos": g[c].std(ddof=1),
                         "sd_folds": by_fold[c].std(ddof=1) if by_fold is not None else np.nan,
+                        "sd_runs": sd_runs.get((m, t, c), np.nan) if sub == CORE else np.nan,
                         "ci_low": lo,
                         "ci_high": hi,
                         "n_repos": len(g),
@@ -250,15 +273,55 @@ def save_results(res: EvalResult, out_dir: Path, code_version: str) -> list[Path
         "file_level": out_dir / "file_level.csv",
         "stats": out_dir / "stats.csv",
     }
-    for attr, p in paths.items():
+    for attr, p in list(paths.items()):
         getattr(res, attr).to_csv(p, index=False)
+    lw = learned_weights(res.meta.get("method_params", {}))
+    if len(lw):
+        lw_path = out_dir / "learned_weights.csv"
+        lw.to_csv(lw_path, index=False)
+        paths["learned_weights"] = lw_path
+    grid = tuning_table(res.meta.get("method_params", {}))
+    if len(grid):
+        grid_path = out_dir / "grid.csv"
+        grid.to_csv(grid_path, index=False)
+        paths["grid"] = grid_path
+    figures = make_figures(out_dir, res.per_repo, res.breakdowns, lw, res.meta["methods"])
     pq_path = out_dir / "per_query.parquet"
     res.per_query.to_parquet(pq_path, index=False)
     meta_path = out_dir / "run.json"
     meta_path.write_text(json.dumps({**res.meta, "code_version": code_version}, indent=2))
     md_path = out_dir / "summary.md"
     md_path.write_text(summary_markdown(res))
-    return [*paths.values(), pq_path, meta_path, md_path]
+    return [*paths.values(), *figures, pq_path, meta_path, md_path]
+
+
+def tuning_table(method_params: dict) -> pd.DataFrame:
+    """Grid-search runs of every fold: configuration, seed, validation MRR, chosen flag."""
+    rows = []
+    for by_method in method_params.values():
+        for m, p in by_method.items():
+            for r in p.get("tuning", []):
+                rows.append({"method": m, **r, "chosen": r["config"] == p.get("chosen")})
+    return pd.DataFrame(rows)
+
+
+def learned_weights(method_params: dict) -> pd.DataFrame:
+    """One row per learned run (method, fold, seed): weights per feature + offset + fitness."""
+    rows = []
+    for by_method in method_params.values():
+        for m, p in by_method.items():
+            for r in p.get("runs", []):
+                rows.append(
+                    {
+                        "method": m,
+                        "fold": r["fold"],
+                        "seed": r["seed"],
+                        **r["weights"],
+                        "offset": r["offset"],
+                        "fitness": r["fitness"],
+                    }
+                )
+    return pd.DataFrame(rows)
 
 
 def summary_markdown(res: EvalResult) -> str:
@@ -304,6 +367,27 @@ def summary_markdown(res: EvalResult) -> str:
         ),
         "",
     ]
+    chosen = {
+        m: p["chosen"]
+        for by_method in m_params(res).values()
+        for m, p in by_method.items()
+        if "chosen" in p
+    }
+    if chosen:
+        per_fold = [
+            f"fold {f}: {by_method[m]['chosen']}"
+            for f, by_method in m_params(res).items()
+            for m in by_method
+            if "chosen" in by_method[m]
+        ]
+        lines += ["Configuration chosen by the grid search (`ga`): " + "; ".join(per_fold), ""]
+    runs = s[(s.subset == CORE) & (s.metric == "rr") & s.sd_runs.notna()]
+    if len(runs):
+        lines += [
+            "SD over runs (GA seeds), core MRR: "
+            + ", ".join(f"{r.method} ({r.target}) {r.sd_runs:.4f}" for r in runs.itertuples()),
+            "",
+        ]
     if len(res.stats):
         lines += [
             "## Paired comparisons (core repos, per-repo MRR, all targets)",
@@ -320,3 +404,7 @@ def summary_markdown(res: EvalResult) -> str:
             )
         lines.append("")
     return "\n".join(lines)
+
+
+def m_params(res: EvalResult) -> dict:
+    return res.meta.get("method_params", {})

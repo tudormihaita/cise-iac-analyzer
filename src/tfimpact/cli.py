@@ -20,7 +20,7 @@ console = Console()
 _log_console: Console | None = None
 
 # commands whose output is kept as evidence in data/logs/<command>_<timestamp>.log
-LOGGED_COMMANDS = {"select-repos", "mine", "build-dataset", "evaluate"}
+LOGGED_COMMANDS = {"select-repos", "mine", "build-dataset", "evaluate", "train", "experiments"}
 
 
 def cfg() -> Config:
@@ -239,13 +239,66 @@ def export_csv(
 
 @app.command()
 def train() -> None:
-    """Train a scorer (GA by default)."""
-    _todo("train")
+    """Train the final GA model on all core repos (weights for `recommend`).
+
+    Uses the configuration the grid search chose most often across the folds of the last
+    `evaluate` run (ties: higher mean validation MRR); run `evaluate` first. The final model is
+    never scored on these repos: its expected quality is the cross-validation estimate.
+    """
+    import json
+    from collections import Counter
+    from dataclasses import asdict, replace
+
+    import pandas as pd
+
+    from tfimpact.evaluation.loader import CORE, dataset_repos, load_repo
+    from tfimpact.methods.ga import GAMethod, config_id, grid_configs
+
+    c = cfg()
+    grid_csv = c.paths.outputs / "grid.csv"
+    if not grid_csv.exists():
+        raise typer.BadParameter("no grid.csv: run `tfimpact evaluate` first")
+    grid = pd.read_csv(grid_csv)
+    chosen = grid[grid.chosen].drop_duplicates(["fold", "config"])
+    votes = Counter(chosen.config)
+    valid = grid.groupby("config").valid.mean()
+    best_id = max(votes, key=lambda k: (votes[k], valid.get(k, 0.0)))
+    best = next(g for g in grid_configs(c.ga) if config_id(g) == best_id)
+    out(f"configuration: {best_id} (chosen in {votes[best_id]} of {chosen.fold.nunique()} folds)")
+    c.ga = replace(best, tune=False)
+    repos = dataset_repos(c)
+    core = repos[repos.subset == CORE].slug.tolist()
+    m = GAMethod(c, "ga")
+    m.n_seeds = 1
+    m.fit([load_repo(c, r, m.names) for r in core], fold=-1)
+    rec = m.runs[0]
+    c.paths.models.mkdir(parents=True, exist_ok=True)
+    path = c.paths.models / "ga_weights.json"
+    path.write_text(
+        json.dumps(
+            {
+                "features": m.names,
+                "weights": rec["weights"],
+                "offset": rec["offset"],
+                "config": best_id,
+                "train_repos": core,
+                "train_fitness": rec["fitness"],
+                "ga": asdict(c.ga),
+                "features_config": asdict(c.features),
+                "code_version": _code_version(),
+            },
+            indent=2,
+        )
+    )
+    out(f"wrote {path}")
 
 
 @app.command()
 def evaluate(
     methods: str = typer.Option(None, help="Comma-separated (default evaluation.methods)"),
+    out_name: str = typer.Option(
+        None, "--out", help="Write into data/results/<name>/ instead (e.g. sanity checks)"
+    ),
 ) -> None:
     """Grouped k-fold evaluation on the core repos (+ add-only repos held out);
     writes data/results/*.csv + summary.md."""
@@ -254,21 +307,53 @@ def evaluate(
     c = cfg()
     names = [m.strip() for m in methods.split(",")] if methods else list(c.evaluation.methods)
     res = run_evaluation(c, names, progress=lambda s: console.log(s))
-    for p in save_results(res, c.paths.results, _code_version()):
+    target = c.paths.outputs / out_name if out_name else c.paths.outputs
+    for p in save_results(res, target, _code_version()):
         out(f"wrote {p}")
-    out(Text(summary_markdown(res)))  # plain text: [..] is not rich markup
+    out(Text(summary_markdown(res)))
 
 
 @app.command()
-def experiments() -> None:
-    """Run ablation / learning-curve experiments."""
-    _todo("experiments")
+def experiments(
+    convergence: bool = typer.Option(
+        False, "--convergence", help="Convergence check: long GA runs with validation curves"
+    ),
+) -> None:
+    """Additional experiments (convergence check; ablation and learning curve to come)."""
+    c = cfg()
+    if not convergence:
+        raise typer.BadParameter("choose an experiment, e.g. --convergence")
+    from tfimpact.evaluation.convergence import plot_convergence, run_convergence
+
+    curves, summary = run_convergence(c, progress=lambda s: console.log(s))
+    c.paths.outputs.mkdir(parents=True, exist_ok=True)
+    curves.to_csv(c.paths.outputs / "convergence.csv", index=False)
+    summary.to_csv(c.paths.outputs / "convergence_summary.csv", index=False)
+    png = plot_convergence(curves, c.ga.generations, c.paths.outputs / "convergence.png")
+    out(Text(summary.round(4).to_string(index=False)))
+    out(
+        f"plateau generation (within {c.ga.convergence_tol} of final): "
+        f"median {summary.plateau_gen.median():.0f}, max {summary.plateau_gen.max()}; "
+        f"validation at {c.ga.generations} gens vs best over "
+        f"{c.ga.convergence_generations}: "
+        f"{summary.valid_at_budget.mean():.4f} vs {summary.valid_max.mean():.4f}"
+    )
+    out(f"wrote {c.paths.outputs / 'convergence.csv'}" + (f", {png}" if png else ""))
 
 
 @app.command()
-def report() -> None:
-    """Build results tables, plots and reports."""
-    _todo("report")
+def export(
+    name: str = typer.Option("main", help="Experiment name: results/<name>/"),
+) -> None:
+    """Copy the curated result files and figures (small, committable) from the run outputs
+    (data/results/) to results/<name>/ (e.g. main, ablation, learning_curve)."""
+    from tfimpact.evaluation.export import export_results
+
+    to = cfg().paths.results / name
+    files = export_results(cfg().paths.outputs, to)
+    for p in files:
+        out(f"copied {p}")
+    out(f"{len(files)} files -> {to}")
 
 
 @app.command()

@@ -125,7 +125,7 @@ def fake_cfg(tmp_path):
     rng = np.random.default_rng(0)
     cfg = load_config()
     cfg.paths.processed = tmp_path / "processed"
-    cfg.paths.results = tmp_path / "results"
+    cfg.paths.outputs = tmp_path / "results"
     cfg.paths.dataset_csv = tmp_path / "dataset.csv"
     cfg.evaluation.folds = 2
     cfg.evaluation.bootstrap = 200
@@ -181,7 +181,7 @@ def test_run_evaluation_end_to_end(fake_cfg):
     assert set(res.breakdowns.by) == {"seed_action", "repo_kind"}
     assert {"added", "modified", "removed"} <= set(res.breakdowns.group)
     assert len(res.file_level) == len(methods)
-    paths = save_results(res, fake_cfg.paths.results, "test")
+    paths = save_results(res, fake_cfg.paths.outputs, "test")
     assert all(p.exists() for p in paths)
     assert "fixed_weights" in summary_markdown(res)
     # folds are saved and reused: a second run gives identical results
@@ -196,7 +196,7 @@ class _Learner(FixedWeights):
     learns = True
     seen: list[list[str]] = []
 
-    def fit(self, train):
+    def fit(self, train, fold=-1):
         _Learner.seen.append(sorted(d.repo for d in train))
         return self
 
@@ -213,3 +213,44 @@ def test_held_out_repos_never_trained_on_and_scored_by_every_fold(fake_cfg):
     e = res.per_query[(res.per_query.repo == "e") & (res.per_query.target == "all")]
     assert e[e.method == "learner"].fold.nunique() == fake_cfg.evaluation.folds
     assert e[e.method == "random"].fold.nunique() == 1
+
+
+def test_run_evaluation_with_ga_variants(fake_cfg):
+    fake_cfg.ga.population, fake_cfg.ga.generations, fake_cfg.ga.fitness_sample = 10, 4, 100
+    fake_cfg.ga.grid.pop_gen = [[6, 3], [3, 6]]  # small nested grid search for `ga`
+    fake_cfg.ga.grid.mutation_rate = [0.3]
+    fake_cfg.ga.grid.crossover_rate = [0.8]
+    fake_cfg.ga.grid.seeds = 1
+    fake_cfg.evaluation.seeds = 2
+    res = run_evaluation(fake_cfg, ["ga", "random_search", "fixed_weights"])
+    s = res.summary.set_index(["method", "target", "subset", "metric"])
+    assert not np.isnan(s.loc[("ga", "all", "core", "rr"), "sd_runs"])
+    assert np.isnan(s.loc[("fixed_weights", "all", "core", "rr"), "sd_runs"])
+    ga_runs = res.per_query[(res.per_query.method == "ga") & (res.per_query.subset == "core")]
+    assert ga_runs.run.nunique() == 2
+    paths = save_results(res, fake_cfg.paths.outputs / "out", "test")
+    lw = pd.read_csv(fake_cfg.paths.outputs / "out" / "learned_weights.csv")
+    # 2 folds x 2 seeds for each learned method
+    assert lw.groupby("method").size().to_dict() == {"ga": 4, "random_search": 4}
+    assert any(p.name == "learned_weights.csv" for p in paths)
+    grid = pd.read_csv(fake_cfg.paths.outputs / "out" / "grid.csv")
+    assert set(grid.method) == {"ga"} and grid.groupby("fold").chosen.any().all()
+    assert (fake_cfg.paths.outputs / "out" / "figures" / "per_repo_mrr.png").exists()
+    assert "chosen by the grid search" in summary_markdown(res)
+    # a second run reuses the saved GA runs and gives identical results
+    res2 = run_evaluation(fake_cfg, ["ga", "random_search", "fixed_weights"])
+    pd.testing.assert_frame_equal(res.per_repo, res2.per_repo)
+
+
+def test_export_results_copies_tables_and_figures(fake_cfg, tmp_path):
+    from tfimpact.evaluation.export import export_results
+
+    res = run_evaluation(fake_cfg, ["fixed_weights", "random"])
+    out = fake_cfg.paths.outputs
+    save_results(res, out, "test")
+    save_results(res, out / "checks", "test")
+    copied = export_results(out, tmp_path / "report")
+    names = {p.relative_to(tmp_path / "report").as_posix() for p in copied}
+    assert {"summary.md", "metrics.csv", "stats.csv", "checks_summary.md"} <= names
+    assert "figures/per_repo_mrr.png" in names and "figures/checks_per_repo_mrr.png" in names
+    assert not any(n.endswith(".parquet") for n in names)  # large files stay in data/results

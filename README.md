@@ -26,6 +26,19 @@ uv run tfimpact clean                 # remove leftover clones in data/tmp
 uv run tfimpact export-csv            # regenerate CSV copies from parquet
 ```
 
+## Training and evaluation
+
+```bash
+uv run tfimpact evaluate              # grouped 5-fold CV: GA (nested grid search) + baselines (~3 h, resumable)
+uv run tfimpact evaluate --methods ga_permuted,ga_negative,fixed_weights --out checks
+uv run tfimpact experiments --convergence
+uv run tfimpact train                 # final model -> models/ga_weights.json
+uv run tfimpact export                # result tables + figures -> results/main/
+```
+
+Main result (53 repos, MRR): GA 0.746, equal weights 0.563, ROSE-style rules 0.481, random 0.118
+(`results/main/summary.md`).
+
 ## Development
 
 ```bash

@@ -28,12 +28,18 @@ class Method(ABC):
     name: str = ""
     learns: bool = False
 
-    def fit(self, train: Sequence[RepoData]) -> Method:
-        """Learn parameters from training repos (no-op for non-learned methods)."""
+    def fit(self, train: Sequence[RepoData], fold: int = -1) -> Method:
+        """Learn parameters from training repos (no-op for non-learned methods).
+        `fold` identifies the cross-validation fold (-1 = all data)."""
         return self
 
     @abstractmethod
     def rank(self, data: RepoData) -> Ranking: ...
+
+    def rank_all(self, data: RepoData) -> list[Ranking]:
+        """One ranking per trained model (e.g. one per GA seed); evaluated separately and
+        averaged per repo."""
+        return [self.rank(data)]
 
     def params(self) -> dict:
         """Learned / configured parameters, recorded with the results."""

@@ -17,8 +17,10 @@ class PathsConfig:
     dataset_csv: Path = Path("data/raw/dataset.csv")
     tmp: Path = Path("data/tmp")
     processed: Path = Path("data/processed")
-    results: Path = Path("data/results")
+    outputs: Path = Path("data/results")  # everything runs write (gitignored)
     logs: Path = Path("data/logs")
+    models: Path = Path("models")
+    results: Path = Path("results")  # curated, committed result tables + figures
 
 
 @dataclass
@@ -97,16 +99,34 @@ class BaselinesConfig:
 
 
 @dataclass
+class GridConfig:
+    # (population, generations) pairs at about the same evaluation budget
+    pop_gen: list[list[int]] = field(default_factory=lambda: [[30, 120], [60, 60], [120, 30]])
+    mutation_rate: list[float] = field(default_factory=lambda: [0.1, 0.3, 0.5])
+    crossover_rate: list[float] = field(default_factory=lambda: [0.6, 0.8, 0.95])
+    seeds: int = 3
+
+
+@dataclass
 class GAConfig:
     population: int = 60
     generations: int = 60
     tournament: int = 3
     crossover_rate: float = 0.8
+    blend_alpha: float = 0.5
     mutation_rate: float = 0.3
     sigma_start: float = 0.2
     sigma_end: float = 0.02
     elitism: int = 2
-    fitness_sample: int = 2000
+    fitness_sample: int = 5000
+    offset_range: float = 1.0
+    check_seeds: int = 1
+    convergence_generations: int = 200
+    convergence_seeds: int = 3
+    convergence_tol: float = 0.001
+    valid_frac: float = 0.25
+    tune: bool = True
+    grid: GridConfig = field(default_factory=GridConfig)
 
 
 @dataclass
@@ -115,7 +135,9 @@ class EvaluationConfig:
     folds: int = 5
     seeds: int = 10
     bootstrap: int = 1000
-    methods: list[str] = field(default_factory=lambda: ["arm", "fixed_weights", "random"])
+    methods: list[str] = field(
+        default_factory=lambda: ["ga", "random_search", "arm", "fixed_weights", "random"]
+    )
 
 
 @dataclass

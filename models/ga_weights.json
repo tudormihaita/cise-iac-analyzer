@@ -1,0 +1,142 @@
+{
+  "features": [
+    "hist_cochange_conf",
+    "hist_cochange_count",
+    "hist_cochange_recency",
+    "hist_cand_recent_changes",
+    "hist_file_cochange_conf",
+    "hist_type_cochange_conf",
+    "graph_proximity",
+    "graph_shared_neighbors",
+    "graph_cand_degree",
+    "graph_propagation_conf",
+    "text_name_similarity",
+    "text_content_similarity"
+  ],
+  "weights": {
+    "hist_cochange_conf": 0.0,
+    "hist_cochange_count": 0.038621339499768724,
+    "hist_cochange_recency": 0.03888878452760482,
+    "hist_cand_recent_changes": 0.02077671728976485,
+    "hist_file_cochange_conf": 0.05878677523511654,
+    "hist_type_cochange_conf": 0.23406184339760933,
+    "graph_proximity": 0.05193253278222795,
+    "graph_shared_neighbors": 0.06863715642920477,
+    "graph_cand_degree": 0.006550066132513161,
+    "graph_propagation_conf": 0.28593346767629135,
+    "text_name_similarity": 0.045096022665535314,
+    "text_content_similarity": 0.1507152943643632
+  },
+  "offset": 0.21725592290935772,
+  "config": "p30g120_m0.1_c0.8",
+  "train_repos": [
+    "terraform-aws-modules__terraform-aws-eks",
+    "terraform-aws-modules__terraform-aws-vpc",
+    "aws-ia__terraform-aws-eks-blueprints",
+    "philips-labs__terraform-aws-github-runner",
+    "poseidon__typhoon",
+    "nozaq__terraform-aws-secure-baseline",
+    "terraform-aws-modules__terraform-aws-lambda",
+    "chadgeary__cloudblock",
+    "terraform-aws-modules__terraform-aws-iam",
+    "kz8s__tack",
+    "kubernetes__k8s.io",
+    "ministryofjustice__modernisation-platform",
+    "kbst__terraform-kubestack",
+    "maddevsio__aws-eks-base",
+    "coreos__tectonic-installer",
+    "awslabs__data-on-eks",
+    "cattle-ops__terraform-aws-gitlab-runner",
+    "terraform-aws-modules__terraform-aws-ecs",
+    "terraform-aws-modules__terraform-aws-s3-bucket",
+    "cloudposse__terraform-aws-eks-cluster",
+    "cloudposse__terraform-aws-components",
+    "terraform-aws-modules__terraform-aws-alb",
+    "alphagov__govuk-aws",
+    "aws-samples__eks-workshop-v2",
+    "terraform-aws-modules__terraform-aws-rds-aurora",
+    "cogini__multi-env-deploy",
+    "BigDataBoutique__elasticsearch-cloud-deploy",
+    "gitops-bridge-dev__gitops-bridge",
+    "ExpediaDotCom__haystack",
+    "aws-observability__terraform-aws-observability-accelerator",
+    "zenml-io__mlstacks",
+    "fpco__terraform-aws-foundation",
+    "particuleio__terraform-kubernetes-addons",
+    "SebastianUA__terraform",
+    "cloudposse__terraform-aws-dynamic-subnets",
+    "tensult__terraform",
+    "trussworks__terraform-layout-example",
+    "cloudposse__terraform-aws-s3-bucket",
+    "aws-samples__terraform-eks-code",
+    "cloudposse__terraform-aws-ecs-alb-service-task",
+    "aws-observability__aws-otel-lambda",
+    "getamis__vishwakarma",
+    "rust-lang__simpleinfra",
+    "Young-ook__terraform-aws-eks",
+    "alphagov__govuk-infrastructure",
+    "travis-ci__terraform-config",
+    "SUSE__ha-sap-terraform-deployments",
+    "fortinet__fortigate-terraform-deploy",
+    "chadgeary__cloudoffice",
+    "in4it__terraform-modules",
+    "GoogleCloudPlatform__anthos-samples",
+    "thoughtbot__flightdeck",
+    "aws-ia__terraform-aws-vpc"
+  ],
+  "train_fitness": 0.7530908719594545,
+  "ga": {
+    "population": 30,
+    "generations": 120,
+    "tournament": 3,
+    "crossover_rate": 0.8,
+    "blend_alpha": 0.5,
+    "mutation_rate": 0.1,
+    "sigma_start": 0.2,
+    "sigma_end": 0.02,
+    "elitism": 2,
+    "fitness_sample": 5000,
+    "offset_range": 1.0,
+    "check_seeds": 1,
+    "convergence_generations": 200,
+    "convergence_seeds": 3,
+    "convergence_tol": 0.001,
+    "valid_frac": 0.25,
+    "tune": false,
+    "grid": {
+      "pop_gen": [
+        [
+          30,
+          120
+        ],
+        [
+          60,
+          60
+        ],
+        [
+          120,
+          30
+        ]
+      ],
+      "mutation_rate": [
+        0.1,
+        0.3,
+        0.5
+      ],
+      "crossover_rate": [
+        0.6,
+        0.8,
+        0.95
+      ],
+      "seeds": 3
+    }
+  },
+  "features_config": {
+    "max_candidates": 200,
+    "prefilter_max_dist": 4,
+    "graph_max_dist": 4,
+    "recency_tau": 100,
+    "churn_window": 200
+  },
+  "code_version": "c49de58-dirty"
+}
