@@ -485,9 +485,9 @@ def recommend(
     for title, rows in (("Blocks to modify", res.modify), ("Block types to add", res.add_types)):
         t = Table(title=title, title_justify="left")
         t.add_column("#", justify="right")
-        t.add_column("candidate")
+        t.add_column("candidate", overflow="fold")
         if rows is res.modify:
-            t.add_column("file")
+            t.add_column("file", overflow="fold")
         t.add_column("score", justify="right")
         if explain:
             t.add_column("top contributions")
