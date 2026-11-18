@@ -1,0 +1,52 @@
+\section{Background and Related Work}
+\label{sec:background}
+
+\paragraph{Terraform.} A Terraform configuration is organised in directories (modules), each holding
+\texttt{.tf} files with blocks. A block is identified by its kind, type and name within its
+directory, e.g.\ \texttt{resource.aws\_s3\_bucket.logs} or \texttt{var.region}. Blocks refer to
+each other through expressions such as \texttt{var.region}, \texttt{local.tags},
+\texttt{module.vpc.id} or \texttt{aws\_s3\_bucket.logs.arn}; a module call connects the root
+configuration to the variables and outputs of another directory. These references form a graph in
+which an edit can propagate, but co-changes also follow conventions that leave no trace in it, such
+as copies of a configuration kept per environment or blocks that are always added together. IaC
+research has covered tools, adoption practices and the quality of such
+code~\cite{rahman2019iacmapping}; recommending the co-changes of an edit has received little
+attention, GA-IaCRec~\cite{bessghaier2026iacrec} being the closest work.
+
+\paragraph{Mining version histories.} ROSE~\cite{zimmermann2004rose} treats each commit as a
+transaction and mines association rules of the form ``whoever changed $a$ also changed $b$'',
+ranked by confidence and filtered by minimum support and confidence. On eight large open-source
+projects, its top three suggestions contained a correct location in 64\% of the cases. History rules
+need past co-changes of the same pair of entities, so they cannot help with new blocks. We use ROSE
+both as a signal family and, with its original settings, as a baseline.
+
+\paragraph{Search-based recommendation for IaC.} GA-IaCRec~\cite{bessghaier2026iacrec} recommends
+the files that co-change with an edited Ansible or Puppet file. For each query, a genetic algorithm
+searches an ordered list of files that maximises $\alpha \cdot \mathit{history} + \beta \cdot
+\mathit{similarity}$ with fixed $\alpha = \beta = 0.5$; on 20 projects it outperformed other search algorithms and
+association rule mining, and its ablation (each heuristic alone vs.\ both) showed
+the two heuristics to be complementary. It follows the SBSE idea of recasting a software engineering
+problem as a search problem~\cite{harman2001sbse}.
+
+\paragraph{Positioning.} Table~\ref{tab:positioning} summarises the differences. Our genetic
+algorithm does not search a list per query: it learns, once, how much to trust each signal, from
+labelled commits of other repositories, and the learned weights are then applied to unseen ones.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Positioning with respect to the closest prior work.}
+\label{tab:positioning}
+\begin{tabular}{@{}llll@{}}
+\toprule
+ & ROSE~\cite{zimmermann2004rose} & GA-IaCRec~\cite{bessghaier2026iacrec} & \tool{} (ours) \\
+\midrule
+Language          & general-purpose code   & Ansible, Puppet              & Terraform \\
+Granularity       & files, functions       & files                        & blocks + types to add \\
+Signals           & history                & history, similarity          & history, graph, text \\
+Combination       & --                     & fixed weights                & learned weights (GA) \\
+Role of the GA    & --                     & searches a list per query    & learns the weights \\
+Evaluation        & later commits          & last 10\% of commits         & unseen repositories \\
+\bottomrule
+\end{tabular}
+\end{table}

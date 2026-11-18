@@ -1,0 +1,27 @@
+\section{Problem Statement}
+\label{sec:problem}
+
+A commit $t$ of a Terraform repository changes a set $C_t$ of blocks, each one added, modified or
+removed. Every changed block $s \in C_t$ is taken in turn as the \textbf{seed}: the edit a developer
+has just made. The task is to rank, for the seed, two kinds of candidates:
+
+\begin{itemize}
+  \item \textbf{existing blocks} of the repository as it was before the commit (except the seed),
+  labelled positive if $t$ modifies or removes them;
+  \item \textbf{block types to add}, e.g.\ \texttt{aws\_s3\_bucket\_policy}, labelled positive if
+  $t$ adds a block of that type.
+\end{itemize}
+
+One commit with $n$ changed blocks thus yields $n$ ranking queries. As in
+ROSE~\cite{zimmermann2004rose}, labels come from the same commit only; over a third of the commits used are
+\textit{merged pull requests}, which usually cover a complete change. To keep queries manageable,
+existing candidates are pre-filtered to at most 200 blocks, keeping those related to the seed by
+history, by references (at most four hops away), by directory or by name; the share of true answers
+that survive this filter bounds the achievable recall and is reported.
+
+\paragraph{No information from the future.} A query at commit $t$ may use only the repository at
+the parent commit, rules mined from commits before $t$, and the new body of the seed. This mirrors
+how the tool is used: the developer has made one edit and asks what else must change. All
+repositories are processed in a single chronological pass that enforces this order.
+
+\paragraph{Learning task.} The task $T$ is ranking the candidates of a query, the experience $E$ is the mined commit histories of other repositories, and the performance $P$ is the \textbf{mean reciprocal rank} (MRR) of the true answers on repositories not used for training. The output shown to a developer is two separate lists, \emph{blocks to modify} and \emph{block types to add}, so that suggestions of one kind never push out the other.

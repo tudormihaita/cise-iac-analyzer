@@ -1,0 +1,20 @@
+\section{Conclusions and Future Work}
+\label{sec:conclusions}
+
+This report addressed change impact analysis for Terraform: given an edited block, which other
+blocks will change with it, and which blocks will be added? We mined a dataset from 53 open-source
+repositories and learned, with a self-implemented Genetic Algorithm, how to combine twelve signals
+from the repository's history, reference graph and text. \textbf{RQ1}: the Genetic Algorithm is a
+feasible and reliable learner for this task: it learns from the labels, converges within about 60
+generations and gives almost identical results across runs and settings, although random search
+with the same budget comes close. \textbf{RQ2}: the learned ranking clearly outperforms
+history-based rule mining (ROSE) and equal weights, mainly by placing new block types and by
+following references from removed blocks, and the three signal families are complementary. The
+\tool{} tool makes the learned model usable on any local Terraform repository.
+
+Future work follows from the limits above. Non-linear rankers, such as gradient-boosted ranking
+models or Genetic Programming (GP) that evolves the scoring formula, could capture the interactions a
+linear score misses and give the evolutionary search a harder problem; a simpler step is separate
+weights per seed action. An independent sample of new repositories would test the design choices
+as well as the weights, and other cloud providers and IaC languages would test generality. For
+everyday use, caching the mined history would make repeated recommendations instant.

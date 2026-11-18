@@ -1,0 +1,73 @@
+\section{Data Collection}
+\label{sec:data}
+
+No existing dataset records how Terraform blocks change together, so we built one. \textbf{TerraDS}
+\cite{buehler2025terrads}, a collection of over 62,000 open-source Terraform repositories with
+metadata about their modules and resources (\textit{snapshot of 2024}), served only as the starting point
+for finding candidate repositories; the selection criteria, the history mining, the queries and the
+labels are our own.
+
+\paragraph{Repository selection.} Table~\ref{tab:funnel} shows the selection funnel. We kept
+repositories managing at least 20 resources of one cloud provider, AWS, the most common one in
+TerraDS: a single provider gives all repositories a shared vocabulary of resource types, so rules
+learned on one repository transfer to another, and smaller repositories would produce candidate
+lists so short that even random ranking scores well. From the 150 most-starred of them, we kept
+those with at least 50 commits touching \texttt{.tf} files and removed forks and copies (repositories
+sharing their first commit), which would otherwise leak history between training and test
+repositories. After mining, a repository needed at least 50 usable commits for a stable
+per-repository score. 8 repositories in which more than 40\% of the usable commits only add new
+blocks (tutorial collections, generated examples) were set aside: they measure what is written together rather than
+change impact, and are only used as a held-out group, never for training.
+
+\begin{table}[ht]
+\begin{tabular}{@{}lr@{}}
+\toprule
+Step & Repositories \\
+\midrule
+TerraDS repositories with $\geq 20$ managed AWS resources & 9,619 \\
+150 most-starred, $\geq 50$ commits touching \texttt{.tf} files & 79 \\
+after removing forks and copies; mined & 78 \\
+$\geq 50$ usable commits, $\leq 40\%$ add-only commits (\textbf{core}) & \textbf{53} \\
+\quad set aside only for their share of add-only commits (held out) & 8 \\
+\bottomrule
+\end{tabular}
+\centering
+\small
+\caption{Repository selection funnel.}
+\label{tab:funnel}
+\end{table}
+
+\paragraph{History mining.} Each repository is cloned and walked once, oldest commit first, over
+its last 2,000 commits on the main branch (only 5 of the 53 repositories are longer). Merge commits
+are diffed against their first parent, so a merged pull request counts as one change. Every version
+of every \texttt{.tf} file is parsed into blocks, and blocks are compared per directory, so moving a
+block between files or reformatting it is not counted as a change. A commit is \emph{usable} if it
+changes between 2 and 30 blocks: one block gives no co-change to predict, and larger commits are bulk
+refactorings whose co-changes are mostly coincidental (ROSE uses the same cut-off of
+30~\cite{zimmermann2004rose}). The first 20\% of each repository's usable commits only feed the
+history rules and produce no queries, so that history-based signals are not judged on an empty
+history.
+
+\paragraph{Dataset.} Table~\ref{tab:dataset} summarizes the 53 core repositories: 9,269 usable
+commits (typically 5 changed blocks each) result in 55,541 queries with up to 200 existing candidates
+each. On average, the seed is a new block in 38\% of a repository's queries, and 81\% of the true
+answers survive the candidate pre-filter, which is the upper bound of the recall any method can
+reach.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{The 53 core repositories by kind.}
+\label{tab:dataset}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Kind & Repositories & Commits mined & Usable commits & Query commits \\
+\midrule
+Deployment      & 26 & 19,998 & 5,407 & 4,337 \\
+Module library  & 21 & 11,332 & 2,827 & 2,268 \\
+Educational     &  6 &  4,538 & 1,035 &   829 \\
+\midrule
+Total           & 53 & 35,868 & 9,269 & 7,434 \\
+\bottomrule
+\end{tabular}
+\end{table}

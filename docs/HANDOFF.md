@@ -1,6 +1,6 @@
 # Handoff — project status and how to resume
 
-Last updated: 2026-11-18, after the ablation and learning curve (milestone 6 done). Read this first when resuming; `docs/SPEC.md` stays
+Last updated: 2026-11-18, after the report draft (milestone 7 in progress). Read this first when resuming; `docs/SPEC.md` stays
 the source of truth for the design (decisions in §15), `docs/RESULTS.md` holds every result,
 `docs/THRESHOLDS.md` the evidence for every setting.
 
@@ -25,11 +25,10 @@ tuned per fold by nested grid search. Evaluation: grouped 5-fold cross-validatio
 | 4 | evaluation harness, baselines `arm` (ROSE), `fixed_weights`, `random`; stats | done |
 | 5 | GA + random search, convergence check, nested grid search, sanity checks, final model | done |
 | 6 | `recommend` tool, ablation, learning curve | done |
-| **7** | live test + ratings (`docs/LIVE_TEST.md`), optional external set, report, README | **next** |
+| **7** | report (`docs/report/`, drafted), README (done); live test optional, not in the report; external set optional | **in progress** |
 
-Code state: 162 tests pass, `ruff check .` and `ruff format --check .` clean. Milestone 5 is
-committed; `recommend`, ablation and learning curve are uncommitted at the time of writing
-(message in §8).
+Code state: 162 tests pass, `ruff check .` and `ruff format --check .` clean. Everything up to
+the report draft is committed; the latest report edits and README are not (at the time of writing).
 
 ## 3. Key results (details: `docs/RESULTS.md` §5, files: `results/main/`)
 
@@ -103,20 +102,21 @@ the background and re-run the same command after an interruption.
 - Both run through the CV runner with each fold's grid-chosen configuration (`grid.csv`), 3
   seeds; the full GA reuses the main run's files. Settings in `experiments.*`.
 
-**Milestone 7 (next):**
-1. **Live test** (required by the course): follow `docs/LIVE_TEST.md` — repos outside the
-   dataset (recommended `tedilabs/terraform-aws-network`, `dfds/infrastructure-modules`, plus
-   the author's own), prepared edits as patches, expected answers written before running, 2–3
-   raters, records under `results/live/<repo>/`.
-2. **External set** (optional, decided in SPEC §15.17, **not implemented**): final model on
-   every qualifying commit of TerraDS star ranks 151–200 (same filters, fork check against the
-   training repos), separate CSVs under `data/raw/external/`, shared `data/processed/`.
-3. Report (problem, data, ML approach, results incl. ablation + learning curve, validation +
-   feedback, threats, future work), README, `tfimpact report` (SPEC §10).
-
-Open question from the session: move the experiment-only GA options (`fixed`, `train_frac`)
-from `GAMethod` into a `StudyGA` subclass in `evaluation/studies.py` (hooks `configure` /
-`train_subset`; saved-run hashes unchanged). Not decided.
+**Milestone 7 (in progress):**
+1. **Report** — LaTeX in `docs/report/` (`main.tex`, `chapters/01–09`, `biblio.bib`, `fig/`),
+   all sections drafted; target 8–10 pages. Decisions with the author: RQ1 = is the GA a
+   feasible and reliable learner (vs random ranking, shuffled labels, convergence, seeds,
+   random search); RQ2 = learned ranking vs ROSE and equal weights; the ablation is a results
+   subsection without its own RQ, the learning curve one closing paragraph (never a headline);
+   **no live-test / user-feedback section**; §3 "Problem Statement"; Discussion short and feeding
+   future work. Tables report mean ± SD over repos and 95 % CI. Not compiled here (no LaTeX):
+   if it is over 10 pages, trim in this order: learned-weights figure, positioning table rows,
+   merge §6 statistics into comparisons, funnel table into text. `shaw2003writing` is in the bib
+   but not cited; TerraDS page numbers in MSR 2025 still to check.
+2. **README** — commands for every step incl. experiments, results table: done.
+3. **Live test** (optional, not part of the report): `docs/LIVE_TEST.md`.
+4. **External set** (optional, SPEC §15.17, **not implemented**).
+5. `tfimpact report` (SPEC §10) is not implemented; the LaTeX report replaces it.
 
 **Optional extensions discussed** (only after 6–7): context-dependent GA (weights per seed
 action), LightGBM LambdaMART as a non-linear reference, relational association rules as a second
@@ -177,9 +177,8 @@ the end of `select-repos` (output path shadowed the print helper).
 I'm resuming work on the tfimpact project (Terraform change-impact recommender, course
 project). Read CLAUDE.md, then docs/HANDOFF.md (status, results, next steps, working
 agreements), then the relevant parts of docs/SPEC.md (§15 holds all decisions) and
-docs/RESULTS.md. Milestones 1–6 are done (recommend, ablation, learning curve). In this
-session we do milestone 7: the live test following docs/LIVE_TEST.md, optionally the external
-set (SPEC §15.17), then the report and README. Before implementing, summarize your understanding
+docs/RESULTS.md. Milestones 1–6 are done and the report in docs/report/ is drafted (HANDOFF §6).
+In this session we finish the report (compile, page count, final edits). Before implementing, summarize your understanding
 of the current state and propose the exact plan for each part (variants, seeds, run time,
 outputs, how the live checks are recorded) so I can confirm it. Follow the working agreements in
 HANDOFF §7 (I commit myself; propose decisions before making them; no SPEC references in code

@@ -34,10 +34,20 @@ uv run tfimpact evaluate --methods ga_permuted,ga_negative,fixed_weights --out c
 uv run tfimpact experiments --convergence
 uv run tfimpact train                 # final model -> models/ga_weights.json
 uv run tfimpact export                # result tables + figures -> results/main/
+uv run tfimpact experiments --ablation --learning-curve   # ~40 min, reuses the main run
+uv run tfimpact export --name ablation && uv run tfimpact export --name learning_curve
 ```
 
-Main result (53 repos, MRR): GA 0.746, equal weights 0.563, ROSE-style rules 0.481, random 0.118
-(`results/main/summary.md`).
+Results (53 repositories, grouped 5-fold cross-validation by repository, MRR):
+
+| | MRR | Where |
+|---|---|---|
+| GA (learned weights) | **0.746** (Hit@5 0.846) | `results/main/` |
+| random search, same budget | 0.733 | `results/main/` |
+| equal weights | 0.563 | `results/main/` |
+| ROSE-style rules | 0.481 | `results/main/` |
+| random ranking | 0.118 | `results/main/` |
+| GA on one signal family: history / text / graph | 0.660 / 0.488 / 0.420 | `results/ablation/` |
 
 ## Recommending co-changes (inference)
 

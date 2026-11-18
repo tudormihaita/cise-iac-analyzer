@@ -1,0 +1,68 @@
+\section{Introduction}
+\label{sec:introduction}
+
+\textbf{Infrastructure as Code (IaC)} describes servers, networks and cloud services in versioned source
+files instead of manual configuration, and has become a research area of its own in Software
+Engineering~\cite{rahman2019iacmapping}. In \textbf{Terraform}, the most widely used IaC tool, a
+configuration is a set of \emph{blocks} written in HCL: resources, data sources, module calls,
+input variables, outputs and locals. Blocks refer to each other by name, so a change rarely stays
+local. Renaming an input variable breaks every block that still reads it and every module call that
+still passes it (Listing~\ref{lst:example}); removing a resource breaks the outputs that expose it;
+adding a bucket usually comes with its access policy and versioning blocks. Finding everything an
+edit affects is the classic maintenance activity of \textbf{change impact
+analysis}~\cite{bohner1996cia}. In IaC, a missed co-change surfaces late, when the configuration is
+validated or planned, or never, when copies of a setting silently drift apart.
+
+\begin{lstlisting}[style=hcl, caption={\small A variable rename inside a module and the two blocks it breaks.}, label={lst:example}, float=t]
+# modules/storage/variables.tf
+variable "bucket_name" { type = string }    # renamed from "name"
+
+# modules/storage/main.tf
+resource "aws_s3_bucket" "logs" {
+  bucket = var.name                          # still reads the old name
+}
+
+# main.tf (root module)
+module "storage" {
+  source = "./modules/storage"
+  name   = "app-logs"                        # still passes the old input
+}
+\end{lstlisting}
+
+Several signals point to the blocks an edit affects, but none suffices alone. References are exact
+but do not link copies of the same configuration kept in different directories. The commit
+history reveals couplings that no reference shows~\cite{zimmermann2004rose}, but it is empty for new
+blocks. Names and contents connect similar blocks, but also unrelated ones. How much each signal
+should be trusted is not known beforehand and differs between them, which makes the combination a
+natural target for machine learning: the task is to rank candidate blocks, the experience is the
+commit history of many repositories, and performance is how high the blocks that really changed
+are ranked~\cite{mitchell1997ml}. Learning the weights of the combination means searching a
+continuous space for the best value of a ranking metric that has no gradient, a problem suited to
+metaheuristic search and hence to search-based software engineering
+(SBSE)~\cite{harman2001sbse}. The closest prior work, \textbf{GA-IaCRec}~\cite{bessghaier2026iacrec}, uses a
+genetic algorithm to recommend co-changing \emph{files} for Ansible and Puppet, with the weights of
+its two heuristics fixed by hand.
+
+This report presents \tool, which learns this combination for Terraform at the level of
+individual blocks, and answers 2 research questions:
+\begin{itemize}
+  \item \textbf{RQ1}: Is a genetic algorithm a feasible learner for block-level co-change
+  prediction, i.e.\ does it learn from the labels, converge reliably, and find better weights than
+  random search with the same budget?
+  \item \textbf{RQ2}: Does a learned combination of signals rank co-changes better than mining the
+  history alone (ROSE~\cite{zimmermann2004rose}) and than an equal-weight combination?
+\end{itemize}
+
+The contributions of this study are as follows:
+\begin{enumerate}
+    \item Block-level co-change recommendation for Terraform that also predicts
+        the \emph{types} of blocks to add.
+    \item A dataset of 53 open-source repositories mined commit by
+        commit without information leakage from the future, plus 8 held-out repositories of a
+        different kind.
+    \item 12 signals in 3 families combined
+        by weights learned with a self-implemented Genetic Algorithm;
+    \item An evaluation on
+        repositories never seen during training, together with the \tool{} command-line tool that applies
+        the learned model to any local Terraform repository.
+\end{enumerate}

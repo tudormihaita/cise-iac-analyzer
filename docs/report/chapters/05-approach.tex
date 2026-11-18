@@ -1,0 +1,110 @@
+\section{Approach}
+\label{sec:approach}
+
+Figure~\ref{fig:pipeline} gives an overview. For every query, 12 signals relate the seed to a
+candidate; a linear score combines them, and a \textbf{Genetic Algorithm} (GA) learns the weights of that score
+from the queries of the training repositories. The same pipeline, applied to a developer's local
+repository, powers the \tool{} command-line tool.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw, rounded corners, align=center, font=\footnotesize, minimum height=9mm,
+              inner sep=3pt},
+  arr/.style={-{Stealth[length=2mm]}, thick},
+  node distance=4mm]
+\node[box] (sel) {Repository\\selection\\(TerraDS)};
+\node[box, right=of sel] (mine) {History mining\\(chronological,\\no future data)};
+\node[box, right=of mine] (feat) {Queries +\\12 signals\\per candidate};
+\node[box, right=of feat] (ga) {Genetic\\algorithm\\(learns weights)};
+\node[box, right=of ga] (rec) {\tool{} \texttt{recommend}\\on a local\\repository};
+\draw[arr] (sel) -- (mine);
+\draw[arr] (mine) -- (feat);
+\draw[arr] (feat) -- (ga);
+\draw[arr] (ga) -- (rec);
+\end{tikzpicture}
+\caption{\small Overview: from repository selection to the recommendation tool.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{Signals}
+Table~\ref{tab:features} lists the signals, all scaled to $[0, 1]$, in 3 families. The
+\textbf{History} family mines \textbf{association rules} from the repository's own earlier commits, as
+ROSE~\cite{zimmermann2004rose} does, at 3 granularities: between blocks, between files, and
+between block types; the type-level rule (``adding a bucket goes with adding a bucket policy'') is
+the only history signal available for new blocks.
+
+The \textbf{Graph} family uses the reference graph of the repository before the commit, including the links a module call creates to another directory; shared neighbors are weighted with the Adamic--Adar index~\cite{adamic2003friends}, so a shared rare neighbor counts more than a shared hub such as a common tags variable. The propagation rule is mined: it learns from earlier commits how often a direct neighbor changes, separately for added, modified and removed seeds and for each edge direction, because a removed block breaks its referencers far more often than an edited one.
+
+The \textbf{Text} family compares names and the contents of the blocks (TF-IDF over the tokens of their bodies), which links copies of a configuration that no reference connects. Every signal is computed per repository and only from data available before the commit (Section~\ref{sec:problem}).
+
+\begin{table}[ht]
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{10.2cm}@{}}
+\toprule
+Signal & Definition \\
+\midrule
+\multicolumn{2}{@{}l}{\emph{History} (earlier commits of the repository)} \\
+\textbf{co-change confidence} & share of past commits changing $s$ that also changed $c$ \\
+\textbf{co-change count}      & number of past commits changing both (log-scaled) \\
+\textbf{co-change recency}    & co-changes weighted by how recent they are \\
+\textbf{recent changes}      & how often $c$ changed in the last 200 commits \\
+\textbf{file confidence}      & the same rule between the files of $s$ and $c$ \\
+\textbf{type rule}            & rule between block types, e.g.\ modified \texttt{variable} $\Rightarrow$ changed \texttt{module}; for types to add, $\Rightarrow$ added type \\
+\midrule
+\multicolumn{2}{@{}l}{\emph{Graph} (references before the commit)} \\
+proximity            & $1/(1+d)$ for reference distance $d \le 4$, else 0 \\
+\textbf{shared neighbors}    & Adamic--Adar score of common neighbors \\
+\textbf{degree}              & number of references of $c$ \\
+\textbf{propagation rule}     & learned rate at which direct neighbors change, per seed action and edge direction \\
+\midrule
+\multicolumn{2}{@{}l}{\emph{Text}} \\
+\textbf{name similarity}      & overlap of name tokens; for types to add, seed name vs.\ type name \\
+\textbf{content similarity}   & TF-IDF cosine of the seed's new body and the candidate's body \\
+\bottomrule
+\end{tabular}
+\centering
+\footnotesize
+\caption{The 12 engineered features relating a seed $s$ to a candidate $c$.}
+\label{tab:features}
+\end{table}
+
+\subsection{Scoring Model}
+A candidate with signal vector $\mathbf{x}$ receives the score
+\[
+  \mathit{score}(\mathbf{x}) = \mathbf{w}^\top \mathbf{x} + b \cdot [\text{$c$ is a type to add}],
+  \qquad w_i \ge 0,\ \textstyle\sum_i w_i = 1,\ b \in [-1, 1].
+\]
+Each weight reads as the share of trust in one signal. The offset $b$ is needed because a type to
+add has only two non-zero signals (type rule and name similarity), so without it such candidates
+would always rank below existing blocks, or above them if those two weights grew. Weights are
+non-negative because every signal was designed so that a higher value means a stronger relation;
+a check that allows negative weights confirms this (Section~\ref{sec:results}).
+
+\subsection{Genetic Algorithm}
+The 13 parameters ($\mathbf{w}$ and $b$) are learned by a Genetic Algorithm implemented from
+scratch. A chromosome holds the 13 real-valued genes; after every variation step the
+weights are clipped at zero and normalized to sum 1, and the offset is clipped to $[-1, 1]$. The
+fitness is the \emph{MRR} obtained with the chromosome's weights on a fixed sample of 5,000 training
+queries, with the same number of queries from every training repository so that large
+repositories do not dominate.
+
+Evaluating on a sample instead of all ${\sim}44$k training queries is
+a form of fitness approximation~\cite{jin2005fitness}: a check on one fold gave the same test MRR
+at a ninth of the cost. The fitness of the whole population is computed with one matrix product.
+Parents are chosen by tournament selection (size 3) and recombined with BLX-$\alpha$ crossover
+($\alpha = 0.5$)~\cite{eshelman1993blx}; Gaussian mutation uses a step size that shrinks from 0.2
+to 0.02 over the run, and the two best individuals survive unchanged (elitism).
+
+The remaining settings were not assumed but tuned on training data only. A convergence check with
+a generous budget (200 generations) showed that validation MRR barely improves after 60 generations
+of 60 individuals (0.735 vs.\ 0.738), which fixed the budget at about 3,600 fitness evaluations. Within each \textbf{cross-validation fold}, a \textbf{grid search} over population/generations at that budget, mutation rate and crossover rate (27 configurations, 3 runs each) trained on 75\% of the training repositories and selected the
+configuration with the best MRR on the other 25\%. The final model, trained on all 53 repositories,
+uses a population of 30, 120 generations, a mutation rate of 0.1 and a crossover rate of 0.8.
+
+\subsection{The \tool{} Tool}
+The command \texttt{tfimpact recommend --repo PATH --diff} applies the final model to a local
+Terraform repository. It mines the repository's history with the same pipeline, takes the blocks
+changed in the working tree as seeds (or a single block given with \texttt{--block}), and prints
+the top blocks to modify and block types to add; \texttt{--explain} shows the signals behind each
+suggestion. It needs only Git and the 13 learned numbers, and runs in a few seconds on a
+repository with a few hundred commits.

@@ -1,0 +1,33 @@
+\section{Evaluation Setup}
+\label{sec:evaluation}
+
+\paragraph{Protocol.} We use grouped 5-fold cross-validation over repositories: the 53 core
+repositories are split into five folds of similar query count, and every fold is tested with
+weights learned on the other four, so each repository is scored by a model that never saw it. Only
+the 13 weights cross repositories; all signals are always computed within a repository. The grid
+search runs inside each fold on training repositories only, and the genetic algorithm is run with
+10 seeds per fold. The 8 held-out repositories are never trained on and are scored with every
+fold's model.
+
+\paragraph{Metrics.} The primary metric is the \emph{mean reciprocal rank} (MRR), the inverse rank of
+the first true answer, which is also the fitness. We also report \emph{mean average precision} (MAP),
+which rewards ranking \emph{all} true answers high, and Hit@$k$, the share of queries with a true
+answer in the top $k$ (the success rate used by GA-IaCRec~\cite{bessghaier2026iacrec}). Metrics
+are averaged per repository and then over repositories, so every repository counts equally. They
+are reported for two target sets: \textbf{all targets} (existing blocks and types to add) and the
+stricter \textbf{existing blocks only}.
+
+\paragraph{Comparisons.} For RQ1, the GA is compared with a \emph{random ranking} (the
+floor for feasibility) and with \emph{random search}, which draws as many random weight vectors as
+the genetic algorithm evaluates and keeps the best one; two further checks retrain it with the
+labels shuffled within each query, which must destroy what it learns, and with negative weights
+allowed. For RQ2, it is compared with ROSE~\cite{zimmermann2004rose}, run with its original
+settings (rules with support $\ge 1$ and confidence $\ge 0.1$, top 10, the type rule for new
+blocks), and with \emph{equal weights}, the average of the same twelve signals, i.e.\ the
+unlearned combination that GA-IaCRec uses for its two heuristics.
+
+\paragraph{Statistics.} Following the guidelines of Arcuri and Briand for randomized
+algorithms~\cite{arcuri2011stats}, methods are compared on per-repository values ($n = 53$) with
+the Wilcoxon signed-rank test, Holm's correction for multiple comparisons~\cite{holm1979}, and the
+Vargha--Delaney $\hat{A}_{12}$ effect size~\cite{vargha2000a12}, read as negligible, small, medium
+or large at 0.56, 0.64 and 0.71. We also report bootstrap 95\% confidence intervals of the mean.

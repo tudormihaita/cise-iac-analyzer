@@ -1,0 +1,100 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{combelow}
+\usepackage[unicode]{hyperref}
+\hypersetup{
+  colorlinks=false,          % boxes instead of colored text
+  pdfborder={0 0 1},         % box thickness (0 0 1 = thin box)
+  citebordercolor=green,     % green boxes for citations
+  linkbordercolor=red,       % boxes for \ref, \eqref, etc.
+  urlbordercolor=blue
+}
+\usepackage{float}
+\usepackage{indentfirst}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{cite}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\usepackage{listings}
+
+\usetikzlibrary{arrows.meta, positioning}
+
+\algrenewcommand\algorithmicrequire{\textbf{Input:}}
+\algrenewcommand\algorithmicensure{\textbf{Output:}}
+
+% Terraform / HCL snippets
+\lstdefinestyle{hcl}{
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue!70!black}\bfseries,
+    morekeywords={resource, variable, module, output, locals, data},
+    morecomment=[l]{\#},
+    commentstyle=\color{gray},
+    showstringspaces=false,
+    breaklines=true,
+    frame=single,
+    framesep=4pt,
+}
+
+\newcommand{\tool}{\texttt{tfimpact}}
+
+\linespread{1}
+\geometry{a4paper,top=3cm,left=3cm,right=2.5cm,bottom=2cm}
+
+\title{
+    {\huge \textbf{Computational Intelligence in Software Engineering}} \\[1.5ex]
+    {\Large \textbf{Learning Where Terraform Changes Propagate: \\ A Genetic Algorithm for IaC Block-Level Co-Change Impact}}
+}
+
+\author{\textbf{Author:} Tudor-Octavian Mih\u{a}i\c{t}\u{a}\\ \textbf{Group:} ICA 246-2}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\textbf{Infrastructure-as-Code (IaC)} files describe cloud infrastructure as interdependent code blocks, so
+editing one block often requires changes elsewhere: a renamed variable breaks the module calls that
+pass it, a removed resource breaks the outputs that read it. Missing such a co-change is a common
+source of failed deployments. This report presents \tool, a tool that, given an edited Terraform
+block, ranks the other blocks likely to change in the same commit and the block types likely to be
+added. Twelve signals from three families (association rules mined from the repository's own
+history, its reference graph, and text similarity) are combined by a linear score whose weights are
+learned by a self-implemented Genetic Algorithm. We built a dataset from the commit histories of
+53 open-source \emph{Terraform} repositories selected from \emph{TerraDS} and evaluated the approach with grouped
+5-fold cross-validation over repositories. The learned ranking reaches an MRR of \textbf{0.746} and a Hit@5 of
+\textbf{0.846}, ahead of history-based rule mining (ROSE, 0.481) and of equal weights (0.563) on 53 of 53 and
+51 of 53 repositories. An ablation shows that the three signal families are complementary, and better results are obtained when combining the strengths of each feature type for co-change recommendation.
+\end{abstract}
+
+% Page budget (8--9 pages incl. bibliography): 1 Intro 0.9 | 2 Background 0.8 | 3 Problem 0.5 |
+% 4 Data 1.0 | 5 Approach 1.5 | 6 Evaluation setup 0.75 | 7 Results 2.0 | 8 Discussion 0.5 |
+% 9 Conclusions 0.4 | Bibliography 0.5
+
+\input{chapters/01-introduction}
+\input{chapters/02-background}
+\input{chapters/03-problem}
+% \input{chapters/04-data}
+% \input{chapters/05-approach}
+% \input{chapters/06-evaluation}
+% \input{chapters/07-results}
+% \input{chapters/08-discussion}
+% \input{chapters/09-conclusions}
+
+\bibliographystyle{alpha}
+\bibliography{biblio}
+
+\end{document}

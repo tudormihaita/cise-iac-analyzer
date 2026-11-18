@@ -1,0 +1,21 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{The linear score is the limit.} Learning pays off where one weight vector must place 2
+kinds of candidates or reward a rare but strong signal (added and removed seeds), but on existing
+blocks the learned weights only tie equal weights, and more training data does not help. What is
+missing is not data but interactions: a signal's value depends on context (the propagation rule
+matters for removed seeds, content similarity for copies), which a single linear score cannot
+express.
+
+\paragraph{Learning matters more than the optimizer.} Random search with the same budget comes within 0.013 MRR
+of the GA, and the GA's settings barely matter. The contribution lies more in \emph{learning} the
+combination from mined labels than in the choice of optimizer; a harder search space, such as
+evolving the scoring formula itself, would put the GA to a stronger test.
+
+\paragraph{Scope and limitations.} \emph{Labels are co-changes, not necessary changes}: a commit may bundle
+unrelated edits or leave a required one for later, which makes the results pessimistic rather than
+optimistic. The repositories use AWS only, and thresholds and signals were designed while looking at
+the same repositories that were later evaluated (the learned weights never saw their test
+repositories, but our design choices did). Finally, the history is limited to the last 2,000
+commits, the condition under which the model was evaluated.
